@@ -1,5 +1,5 @@
 //список пунктов назначения
-export const mockDestinations = [
+const mockDestinations = [
   {
     id: 'd-1',
     description: 'Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.',
@@ -41,3 +41,9 @@ export const mockDestinations = [
     pictures: []
   },
 ];
+
+function getDestinations() {
+  return mockDestinations;
+}
+
+export {getDestinations};

@@ -1,8 +1,9 @@
-import {POINT_COUNT} from '../const';
+import {POINTS_COUNT} from '../const';
 import {getRandomArrayElement, getRandomInteger} from '../utils';
+import {getRandomOffers} from './offers';
 
 //список точек маршрута
-export const mockPoints = [
+const mockPoints = [
   {
     id: 'p-01',
     basePrice: getRandomInteger(10, 1000),
@@ -10,7 +11,7 @@ export const mockPoints = [
     dateTo: '2023-03-18T11:00:00.000Z',
     destination: 'd-1',
     isFavorite: !!getRandomInteger(0, 1),
-    offers: ['of-1', 'of-2'],
+    offers: getRandomOffers('taxi'),
     type: 'taxi'
   },
   {
@@ -20,7 +21,7 @@ export const mockPoints = [
     dateTo: '2023-03-18T13:35:00.000Z',
     destination: 'd-2',
     isFavorite: !!getRandomInteger(0, 1),
-    offers: ['of-10', 'of-13'],
+    offers: getRandomOffers('flight'),
     type: 'flight'
   },
   {
@@ -30,7 +31,7 @@ export const mockPoints = [
     dateTo: '2023-03-18T16:05:00.000Z',
     destination: 'd-2',
     isFavorite: !!getRandomInteger(0, 1),
-    offers: ['of-25'],
+    offers: getRandomOffers('drive'),
     type: 'drive'
   },
   {
@@ -40,7 +41,7 @@ export const mockPoints = [
     dateTo: '2023-03-18T17:00:00.000Z',
     destination: 'd-2',
     isFavorite: !!getRandomInteger(0, 1),
-    offers: ['of-17', 'of-18', 'of-20'],
+    offers: getRandomOffers('check-in'),
     type: 'check-in'
   },
   {
@@ -50,7 +51,7 @@ export const mockPoints = [
     dateTo: '2023-03-19T14:20:00.000Z',
     destination: 'd-2',
     isFavorite: !!getRandomInteger(0, 1),
-    offers: [],
+    offers: getRandomOffers('sightseeing'),
     type: 'sightseeing'
   },
   {
@@ -60,7 +61,7 @@ export const mockPoints = [
     dateTo: '2023-03-19T17:00:00.000Z',
     destination: 'd-2',
     isFavorite: !!getRandomInteger(0, 1),
-    offers: ['of-26'],
+    offers: getRandomOffers('drive'),
     type: 'drive'
   },
   {
@@ -70,7 +71,7 @@ export const mockPoints = [
     dateTo: '2023-03-19T19:00:00.000Z',
     destination: 'd-3',
     isFavorite: !!getRandomInteger(0, 1),
-    offers: ['of-10', 'of-12', 'of-14', 'of-15'],
+    offers: getRandomOffers('flight'),
     type: 'flight'
   },
   {
@@ -80,7 +81,7 @@ export const mockPoints = [
     dateTo: '2023-03-20T09:25:00.000Z',
     destination: 'd-3',
     isFavorite: !!getRandomInteger(0, 1),
-    offers: ['of-25', 'of-26'],
+    offers: getRandomOffers('drive'),
     type: 'drive'
   },
   {
@@ -90,7 +91,7 @@ export const mockPoints = [
     dateTo: '2023-03-20T09:25:00.000Z',
     destination: 'd-3',
     isFavorite: !!getRandomInteger(0, 1),
-    offers: [],
+    offers: getRandomOffers('sightseeing'),
     type: 'sightseeing'
   },
 ];
@@ -99,7 +100,7 @@ export const mockPoints = [
 function getRandomPoints() {
   const pointsRandom = Array.from({length: 0});
 
-  while (pointsRandom.length < POINT_COUNT) {
+  while (pointsRandom.length < POINTS_COUNT) {
     const item = getRandomArrayElement(mockPoints);
 
     if (!pointsRandom.includes(item)) {

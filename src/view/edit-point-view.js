@@ -4,7 +4,7 @@ import { capitalize, getElementById, getElementByType, convertDate } from '../ut
 
 //создать элемент списка для типов точек маршрута
 function createTypeTemplate(type, checkedType, id) {
-  const isChecked = checkedType === type ? 'checked' : false;
+  const isChecked = checkedType === type ? 'checked' : '';
 
   return (
     `<div class="event__type-item">
@@ -15,9 +15,9 @@ function createTypeTemplate(type, checkedType, id) {
 }
 
 //создать элемент для списка дополнительных предложений
-function createOfferTemplate(offer, checkedOffers) {
+function createOfferTemplate(offer, checkedOffersId) {
   const {id, title, price} = offer;
-  const isChecked = checkedOffers.includes(id) ? 'checked' : false;
+  const isChecked = checkedOffersId.includes(id) ? 'checked' : '';
 
   return (
     `<div class="event__offer-selector">
@@ -32,14 +32,14 @@ function createOfferTemplate(offer, checkedOffers) {
 }
 
 //создать блок для списка дополнительных предложений
-function createOfferListTemplate({offers}, checkedOffers) {
+function createOfferListTemplate({offers}, checkedOffersId) {
   if (offers.length !== 0) {
     return (
       `<section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-          ${offers.map((offer) => createOfferTemplate(offer, checkedOffers)).join('')}
+          ${offers.map((offer) => createOfferTemplate(offer, checkedOffersId)).join('')}
         </div>
       </section>`
     );
@@ -48,19 +48,13 @@ function createOfferListTemplate({offers}, checkedOffers) {
   return '';
 }
 
-//создать фотографию для описания точки маршрута
-function createPhotoTemplate(photo) {
-  const {src, description} = photo;
-  return (`<img class="event__photo" src=${src} alt=${description}>`);
-}
-
 //создать список фотографий для описания точки маршрута
 function createPhotoContainerTemplate(pictures) {
-  if (pictures.length) {
+  if (pictures.length > 0) {
     return (
       `<div class="event__photos-container">
         <div class="event__photos-tape">
-          ${pictures.map((item) => createPhotoTemplate(item)).join('')}
+          ${pictures.map(({src, description}) => `<img class="event__photo" src=${src} alt=${description}>`).join('')}
         </div>
       </div>`
     );
@@ -88,8 +82,8 @@ function createDestinationTemplate(destination) {
 }
 
 //создать форму редактирования точек маршрута
-function createEditPointTemplate(points, offers, destinations) {
-  const { id, type, dateFrom, dateTo, basePrice, offers: checkedOffers, destination: pointDestination } = points;
+function createEditPointTemplate(point, offers, destinations) {
+  const { id, type, dateFrom, dateTo, basePrice, offers: checkedOffersId, destination: pointDestination } = point;
   const filteredOfferByType = getElementByType(offers, type);
   const filteredDestinationById = getElementById(destinations, pointDestination);
   const { name } = filteredDestinationById;
@@ -126,10 +120,10 @@ function createEditPointTemplate(points, offers, destinations) {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-${id}">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value=${convertDate(dateFrom, DateFormat.DAY_MONTH_YEAR)}>
+            <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value=${convertDate(dateFrom, DateFormat.DAY_MONTH_YEAR_TIME)}>
             &mdash;
             <label class="visually-hidden" for="event-end-time-${id}">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value=${convertDate(dateTo, DateFormat.DAY_MONTH_YEAR)}>
+            <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value=${convertDate(dateTo, DateFormat.DAY_MONTH_YEAR_TIME)}>
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -147,7 +141,7 @@ function createEditPointTemplate(points, offers, destinations) {
           </button>
         </header>
         <section class="event__details">
-          ${createOfferListTemplate(filteredOfferByType, checkedOffers)}
+          ${createOfferListTemplate(filteredOfferByType, checkedOffersId)}
           ${createDestinationTemplate(filteredDestinationById)}
         </section>
       </form>
@@ -157,14 +151,14 @@ function createEditPointTemplate(points, offers, destinations) {
 
 //класс для взаимодействия с формой редактирования точек маршрута
 export default class EditPointView {
-  constructor({points, offers, destinations}) {
-    this.points = points;
+  constructor({point, offers, destinations}) {
+    this.point = point;
     this.offers = offers;
     this.destinations = destinations;
   }
 
   getTemplate() {
-    return createEditPointTemplate(this.points, this.offers, this.destinations);
+    return createEditPointTemplate(this.point, this.offers, this.destinations);
   }
 
   getElement() {

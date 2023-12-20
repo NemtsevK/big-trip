@@ -1,11 +1,12 @@
 import {createElement} from '../render.js';
-import {getDestinationNames, getFullPrice, getMaxData, getMinData} from '../utils.js';
+import {getDestinationNames, getFullPrice, getMaxDate, getMinDate} from '../utils.js';
+import {COUNT_DESTINATIONS_NAMES} from '../const';
 
 //создать заголовок из списка пунктов назначения
 function createTitle(points, destinations) {
   const filterPointsByNames = getDestinationNames(destinations, points);
 
-  if (filterPointsByNames.length > 3) {
+  if (filterPointsByNames.length > COUNT_DESTINATIONS_NAMES) {
     return `${filterPointsByNames.at(0)} &mdash;...&mdash; ${filterPointsByNames.at(-1)}`;
   }
 
@@ -19,7 +20,7 @@ function createInfoTemplate(points, offers, destinations) {
         <div class="trip-info__main">
           <h1 class="trip-info__title">${createTitle(points, destinations)}</h1>
 
-          <p class="trip-info__dates">${getMinData(points)}&nbsp;&mdash;&nbsp;${getMaxData(points)}</p>
+          <p class="trip-info__dates">${getMinDate(points)}&nbsp;&mdash;&nbsp;${getMaxDate(points)}</p>
         </div>
 
         <p class="trip-info__cost">

@@ -59,14 +59,14 @@ function createPointTemplate(points, offers, destinations) {
 
 //класс для взаимодействия с точкой маршрута
 export default class PointView {
-  constructor({points, offers, destinations}) {
-    this.points = points;
+  constructor({point, offers, destinations}) {
+    this.point = point;
     this.offers = offers;
     this.destinations = destinations;
   }
 
   getTemplate() {
-    return createPointTemplate(this.points, this.offers, this.destinations);
+    return createPointTemplate(this.point, this.offers, this.destinations);
   }
 
   getElement() {

@@ -12,18 +12,18 @@ export default class TripPresenter {
   sortListView = new SortView();
   filterListView = new FilterView();
 
-  constructor({infoContainer, filterContainer, tripContainer, pointModel}) {
+  constructor({infoContainer, filterContainer, tripContainer, tripModel}) {
     this.infoContainer = infoContainer;
     this.filterContainer = filterContainer;
     this.tripContainer = tripContainer;
-    this.pointModel = pointModel;
+    this.tripModel = tripModel;
   }
 
   init() {
 
-    const points = this.pointModel.getPoints();
-    const offers = this.pointModel.getOffers();
-    const destinations = this.pointModel.getDestinations();
+    const points = this.tripModel.getPoints();
+    const offers = this.tripModel.getOffers();
+    const destinations = this.tripModel.getDestinations();
     this.tripPoint = [...points];
 
     render(new InfoView({
@@ -37,14 +37,14 @@ export default class TripPresenter {
     render(this.pointListView, this.tripContainer);
 
     render(new EditPointView({
-      points: this.tripPoint[0],
+      point: this.tripPoint[0],
       offers: offers,
       destinations: destinations
     }), this.pointListView.getElement());
 
     for (let i = 1; i < this.tripPoint.length; i++) {
       render(new PointView({
-        points: this.tripPoint[i],
+        point: this.tripPoint[i],
         offers: offers,
         destinations: destinations
       }), this.pointListView.getElement());
