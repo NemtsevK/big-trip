@@ -1,18 +1,12 @@
-import { getDestinations } from '../mock/destinations';
-import { getOffers } from '../mock/offers';
-import { getRandomPoints } from '../mock/points';
+import {getDestinations} from '../mock/destinations';
+import {getOffers} from '../mock/offers';
+import {getRandomPoints} from '../mock/points';
 
-//класс взаимодействие с тестовыми данными
+//класс работы с данными
 export default class TripModel {
   #points = [];
   #offers = [];
   #destinations = [];
-
-  init() {
-    this.#points = getRandomPoints();
-    this.#offers = getOffers();
-    this.#destinations = getDestinations();
-  }
 
   get points() {
     return this.#points;
@@ -24,5 +18,11 @@ export default class TripModel {
 
   get destinations() {
     return this.#destinations;
+  }
+
+  init() {
+    this.#points = getRandomPoints();
+    this.#offers = getOffers();
+    this.#destinations = getDestinations();
   }
 }

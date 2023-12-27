@@ -57,28 +57,28 @@ function createPointTemplate(point, offers, destinations) {
   );
 }
 
-//класс для взаимодействия с точкой маршрута
+//класс для визуального представления с точки маршрута
 export default class PointView extends AbstractView {
   #point = null;
   #offers = [];
   #destinations = [];
-  #onEditClick = () => {};
+  #onButtonEditClick = () => {};
 
-  constructor({point, offers, destinations, onEditClick}) {
+  constructor({point, offers, destinations, onButtonEditClick}) {
     super();
     this.#point = point;
     this.#offers = offers;
     this.#destinations = destinations;
-    this.#onEditClick = onEditClick;
+    this.#onButtonEditClick = onButtonEditClick;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
-
-  #editClickHandler = (evt) => {
-    evt.preventDefault();
-    this.#onEditClick();
-  };
 
   get template() {
     return createPointTemplate(this.#point, this.#offers, this.#destinations);
   }
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onButtonEditClick();
+  };
 }

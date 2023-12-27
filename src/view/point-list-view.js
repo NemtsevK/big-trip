@@ -5,7 +5,7 @@ function createPointListTemplate() {
   return '<ul class="trip-events__list"></ul>';
 }
 
-//класс для взаимодействия со списком точек маршрута
+//класс для визуального представления списка точек маршрута
 export default class PointListView extends AbstractView {
   get template() {
     return createPointListTemplate();

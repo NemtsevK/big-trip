@@ -6,11 +6,11 @@ const mockDestinations = [
     name: 'Amsterdam',
     pictures: [
       {
-        src: 'https://loremflickr.com/248/152?=1',
+        src: 'https://loremflickr.com/248/152/town?=1',
         description: 'Amsterdam beautiful place'
       },
       {
-        src: 'https://loremflickr.com/248/152?=2',
+        src: 'https://loremflickr.com/248/152/town?=2',
         description: 'Amsterdam old city'
       }
     ]
@@ -21,15 +21,15 @@ const mockDestinations = [
     name: 'Chamonix',
     pictures: [
       {
-        src: 'https://loremflickr.com/248/152?=3',
+        src: 'https://loremflickr.com/248/152/town?=3',
         description: 'Chamonix parliament building'
       },
       {
-        src: 'https://loremflickr.com/248/152?=4',
+        src: 'https://loremflickr.com/248/152/town?=4',
         description: 'Chamonix old city'
       },
       {
-        src: 'https://loremflickr.com/248/152?=5',
+        src: 'https://loremflickr.com/248/152/town?=5',
         description: 'Chamonix beautiful place'
       }
     ]

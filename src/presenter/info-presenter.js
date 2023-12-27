@@ -1,9 +1,10 @@
 import {RenderPosition, render} from '../framework/render';
 import InfoView from '../view/info-view';
 
+//класс для взаимодействия данных и интерфейса информациии о маршруте
 export default class InfoPresenter {
   #infoContainer = null;
-  #tripModel = {};
+  #tripModel = null;
 
   constructor({infoContainer, tripModel}) {
     this.#infoContainer = infoContainer;

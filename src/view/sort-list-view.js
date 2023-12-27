@@ -22,7 +22,8 @@ function createSortListTemplate() {
   );
 }
 
-export default class SortView extends AbstractView {
+//класс для визуального представления сортировки точек маршрута
+export default class SortListView extends AbstractView {
   get template() {
     return createSortListTemplate();
   }

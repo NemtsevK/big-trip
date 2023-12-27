@@ -1,4 +1,3 @@
-import {FiltersType} from './const';
 import TripModel from './model/trip-model.js';
 import InfoPresenter from './presenter/info-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
@@ -11,11 +10,9 @@ const tripContainer = document.querySelector('.trip-events');
 const tripModel = new TripModel();
 tripModel.init();
 
-const filters = Object.entries(FiltersType).map(([filterType]) => ({type: filterType}));
-
 const infoPresenter = new InfoPresenter({infoContainer, tripModel});
 
-const filterPresenter = new FilterPresenter({filterContainer, filters});
+const filterPresenter = new FilterPresenter({filterContainer});
 
 const tripPresenter = new TripPresenter({tripContainer, tripModel});
 

@@ -1,23 +1,32 @@
 import {render, replace} from '../framework/render';
-import SortView from '../view/sort-view';
+import SortListView from '../view/sort-list-view';
 import PointListView from '../view/point-list-view';
 import PointView from '../view/point-view';
-import EditPointView from '../view/edit-point-view';
+import PointEditView from '../view/point-edit-view';
 
+//класс для взаимодействия данных и интерфейса списка точек маршрута
 export default class TripPresenter {
   #tripPoints = [];
   #tripOffers = [];
   #tripDestinations = [];
 
   #tripContainer = null;
-  #tripModel = {};
+  #tripModel = null;
 
-  #pointListView = new PointListView();
-  #sortListView = new SortView();
+  #pointListComponent = new PointListView();
+  #sortListComponent = new SortListView();
 
   constructor({tripContainer, tripModel}) {
     this.#tripContainer = tripContainer;
     this.#tripModel = tripModel;
+  }
+
+  init() {
+    this.#tripPoints = [...this.#tripModel.points];
+    this.#tripOffers = [...this.#tripModel.offers];
+    this.#tripDestinations = [...this.#tripModel.destinations];
+
+    this.#renderTrip();
   }
 
   #renderPoint({point, offers, destinations}) {
@@ -33,17 +42,17 @@ export default class TripPresenter {
       point,
       offers,
       destinations,
-      onEditClick: () => {
+      onButtonEditClick: () => {
         replaceCardToForm();
         document.addEventListener('keydown', escKeyDownHandler);
       }
     });
 
-    const pointEditComponent = new EditPointView({
+    const pointEditComponent = new PointEditView({
       point,
       offers,
       destinations,
-      onRollupButtonClick: () => {
+      onButtonRollupClick: () => {
         replaceFormToCard();
         document.removeEventListener('keydown', escKeyDownHandler);
       },
@@ -61,12 +70,12 @@ export default class TripPresenter {
       replace(pointComponent, pointEditComponent);
     }
 
-    render(pointComponent, this.#pointListView.element);
+    render(pointComponent, this.#pointListComponent.element);
   }
 
   #renderTrip() {
-    render(this.#sortListView, this.#tripContainer);
-    render(this.#pointListView, this.#tripContainer);
+    render(this.#sortListComponent, this.#tripContainer);
+    render(this.#pointListComponent, this.#tripContainer);
 
     this.#tripPoints.forEach((point) => {
       this.#renderPoint({
@@ -75,13 +84,5 @@ export default class TripPresenter {
         destinations: this.#tripDestinations
       });
     });
-  }
-
-  init() {
-    this.#tripPoints = [...this.#tripModel.points];
-    this.#tripOffers = [...this.#tripModel.offers];
-    this.#tripDestinations = [...this.#tripModel.destinations];
-
-    this.#renderTrip();
   }
 }

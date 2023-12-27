@@ -25,8 +25,8 @@ function createFiltersTemplate(filters) {
   );
 }
 
-//класс для взаимодействия с фильтром точек маршрута
-export default class FilterView extends AbstractView {
+//класс для визуального представления фильтра точек маршрута
+export default class FilterListView extends AbstractView {
   #filters = [];
 
   constructor({filters}) {

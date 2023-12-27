@@ -149,24 +149,28 @@ function createEditPointTemplate(point, offers, destinations) {
   );
 }
 
-//класс для взаимодействия с формой редактирования точек маршрута
-export default class EditPointView extends AbstractView {
+//класс для визуального представления формой редактирования точек маршрута
+export default class PointEditView extends AbstractView {
   #point = null;
   #offers = [];
   #destinations = [];
   #onFormSubmit = () => {};
-  #onRollupButtonClick = () => {};
+  #onButtonRollupClick = () => {};
 
-  constructor({point, offers, destinations, onFormSubmit, onRollupButtonClick}) {
+  constructor({point, offers, destinations, onFormSubmit, onButtonRollupClick}) {
     super();
     this.#point = point;
     this.#offers = offers;
     this.#destinations = destinations;
     this.#onFormSubmit = onFormSubmit;
-    this.#onRollupButtonClick = onRollupButtonClick;
+    this.#onButtonRollupClick = onButtonRollupClick;
 
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollupButtonClick);
-    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#buttonRollupClickHandler);
+    this.element.querySelector('.event--edit').addEventListener('submit', this.#formSubmitHandler);
+  }
+
+  get template() {
+    return createEditPointTemplate(this.#point, this.#offers, this.#destinations);
   }
 
   #formSubmitHandler = (evt) => {
@@ -174,12 +178,8 @@ export default class EditPointView extends AbstractView {
     this.#onFormSubmit();
   };
 
-  #rollupButtonClick = (evt) => {
+  #buttonRollupClickHandler = (evt) => {
     evt.preventDefault();
-    this.#onRollupButtonClick();
+    this.#onButtonRollupClick();
   };
-
-  get template() {
-    return createEditPointTemplate(this.#point, this.#offers, this.#destinations);
-  }
 }
