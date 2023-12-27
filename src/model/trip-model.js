@@ -2,30 +2,27 @@ import { getDestinations } from '../mock/destinations';
 import { getOffers } from '../mock/offers';
 import { getRandomPoints } from '../mock/points';
 
+//класс взаимодействие с тестовыми данными
 export default class TripModel {
   #points = [];
   #offers = [];
   #destinations = [];
 
-  //инициализация тестовых данных
   init() {
     this.#points = getRandomPoints();
     this.#offers = getOffers();
     this.#destinations = getDestinations();
   }
 
-  //получить массив точек маршрута
-  getPoints() {
+  get points() {
     return this.#points;
   }
 
-  //получить массив дополнительных предложений
-  getOffers() {
+  get offers() {
     return this.#offers;
   }
 
-  //получить массив пунктов назначения
-  getDestinations() {
+  get destinations() {
     return this.#destinations;
   }
 }

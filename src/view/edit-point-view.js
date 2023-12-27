@@ -1,5 +1,5 @@
 import { DateFormat, POINTS_TYPE } from '../const.js';
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { capitalize, getElementById, getElementByType, convertDate } from '../utils.js';
 
 //создать элемент списка для типов точек маршрута
@@ -150,26 +150,36 @@ function createEditPointTemplate(point, offers, destinations) {
 }
 
 //класс для взаимодействия с формой редактирования точек маршрута
-export default class EditPointView {
-  constructor({point, offers, destinations}) {
-    this.point = point;
-    this.offers = offers;
-    this.destinations = destinations;
+export default class EditPointView extends AbstractView {
+  #point = null;
+  #offers = [];
+  #destinations = [];
+  #onFormSubmit = () => {};
+  #onRollupButtonClick = () => {};
+
+  constructor({point, offers, destinations, onFormSubmit, onRollupButtonClick}) {
+    super();
+    this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
+    this.#onFormSubmit = onFormSubmit;
+    this.#onRollupButtonClick = onRollupButtonClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#rollupButtonClick);
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
   }
 
-  getTemplate() {
-    return createEditPointTemplate(this.point, this.offers, this.destinations);
-  }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#onFormSubmit();
+  };
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+  #rollupButtonClick = (evt) => {
+    evt.preventDefault();
+    this.#onRollupButtonClick();
+  };
 
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createEditPointTemplate(this.#point, this.#offers, this.#destinations);
   }
 }
