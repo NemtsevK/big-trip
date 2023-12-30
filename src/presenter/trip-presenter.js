@@ -1,8 +1,10 @@
 import {render, replace} from '../framework/render';
+import {FiltersType} from '../const';
 import SortListView from '../view/sort-list-view';
 import PointListView from '../view/point-list-view';
 import PointView from '../view/point-view';
 import PointEditView from '../view/point-edit-view';
+import SystemMessageView from '../view/system-message-view';
 
 //класс для взаимодействия данных и интерфейса списка точек маршрута
 export default class TripPresenter {
@@ -74,6 +76,12 @@ export default class TripPresenter {
   }
 
   #renderTrip() {
+
+    if (this.#tripPoints.length === 0) {
+      render(new SystemMessageView({ filterType: FiltersType.EVERYTHING }), this.#tripContainer);
+      return;
+    }
+
     render(this.#sortListComponent, this.#tripContainer);
     render(this.#pointListComponent, this.#tripContainer);
 

@@ -12,7 +12,7 @@ tripModel.init();
 
 const infoPresenter = new InfoPresenter({infoContainer, tripModel});
 
-const filterPresenter = new FilterPresenter({filterContainer});
+const filterPresenter = new FilterPresenter({filterContainer, tripModel});
 
 const tripPresenter = new TripPresenter({tripContainer, tripModel});
 
