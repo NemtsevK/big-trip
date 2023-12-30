@@ -1,10 +1,10 @@
-import {render, replace} from '../framework/render';
+import {render} from '../framework/render';
 import {FiltersType} from '../const';
 import SortListView from '../view/sort-list-view';
 import PointListView from '../view/point-list-view';
-import PointView from '../view/point-view';
-import PointEditView from '../view/point-edit-view';
 import SystemMessageView from '../view/system-message-view';
+import PointPresenter from './point-presenter';
+import {updateItem} from '../utils/common';
 
 //класс для взаимодействия данных и интерфейса списка точек маршрута
 export default class TripPresenter {
@@ -14,9 +14,11 @@ export default class TripPresenter {
 
   #tripContainer = null;
   #tripModel = null;
+  #systemMessageComponent = null;
 
   #pointListComponent = new PointListView();
   #sortListComponent = new SortListView();
+  #pointPresenters = new Map();
 
   constructor({tripContainer, tripModel}) {
     this.#tripContainer = tripContainer;
@@ -32,57 +34,35 @@ export default class TripPresenter {
   }
 
   #renderPoint({point, offers, destinations}) {
-    const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
-
-    const pointComponent = new PointView({
-      point,
-      offers,
-      destinations,
-      onButtonEditClick: () => {
-        replaceCardToForm();
-        document.addEventListener('keydown', escKeyDownHandler);
-      }
+    const pointPresenter = new PointPresenter({
+      pointListContainer: this.#pointListComponent.element,
+      onPointChange: this.#pointChangeHandle,
+      onModeChange: this.#modeChangeHandle
     });
 
-    const pointEditComponent = new PointEditView({
-      point,
-      offers,
-      destinations,
-      onButtonRollupClick: () => {
-        replaceFormToCard();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      },
-      onFormSubmit: () => {
-        replaceFormToCard();
-        document.addEventListener('keydown', escKeyDownHandler);
-      }
-    });
-
-    function replaceCardToForm() {
-      replace(pointEditComponent, pointComponent);
-    }
-
-    function replaceFormToCard() {
-      replace(pointComponent, pointEditComponent);
-    }
-
-    render(pointComponent, this.#pointListComponent.element);
+    pointPresenter.init(point, offers, destinations);
+    this.#pointPresenters.set(point.id, pointPresenter);
   }
 
-  #renderTrip() {
+  #pointChangeHandle = (updatedPoint) => {
+    this.#tripPoints = updateItem(this.#tripPoints, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#tripOffers, this.#tripDestinations);
+  };
 
-    if (this.#tripPoints.length === 0) {
-      render(new SystemMessageView({ filterType: FiltersType.EVERYTHING }), this.#tripContainer);
-      return;
-    }
+  #modeChangeHandle = () => {
+    this.#pointPresenters.forEach((pointPresenter) => pointPresenter.resetView());
+  };
 
+  #renderSort() {
     render(this.#sortListComponent, this.#tripContainer);
+  }
+
+  #renderSystemMessage({message}) {
+    this.#systemMessageComponent = new SystemMessageView({messageType: message});
+    render(this.#systemMessageComponent, this.#tripContainer);
+  }
+
+  #renderPointsList() {
     render(this.#pointListComponent, this.#tripContainer);
 
     this.#tripPoints.forEach((point) => {
@@ -92,5 +72,15 @@ export default class TripPresenter {
         destinations: this.#tripDestinations
       });
     });
+  }
+
+  #renderTrip() {
+    if (this.#tripPoints.length === 0) {
+      this.#renderSystemMessage({message: FiltersType.EVERYTHING});
+      return;
+    }
+
+    this.#renderSort();
+    this.#renderPointsList();
   }
 }

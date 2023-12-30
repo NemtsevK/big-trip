@@ -47,6 +47,11 @@ const POINTS_TYPE = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-i
 
 const COUNT_DESTINATIONS_NAMES = 3;
 
+const Mode = {
+  DEFAULT: 'default',
+  EDITING: 'editing'
+};
+
 export {
   POINTS_COUNT,
   MILLISECONDS_IN_MINUTE,
@@ -60,5 +65,6 @@ export {
   POINTS_TYPE,
   COUNT_DESTINATIONS_NAMES,
   SystemMessagesLoad,
-  SystemMessages
+  SystemMessages,
+  Mode
 };

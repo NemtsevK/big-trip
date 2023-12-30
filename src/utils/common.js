@@ -19,6 +19,8 @@ const getDestinationNames = (destinations, points = []) => {
 //преобразовать строку, чтобы начиналась с заглавной буквы
 const capitalize = (item) => item.charAt(0).toUpperCase() + item.substring(1);
 
+const isEscape = (event) => event.key === 'Escape';
+
 //получить стоимость всех точек маршрута с дополнительными предложениями
 const getFullPrice = (points, offers) => {
   const baseFullPrice = points.map((point) => point.basePrice).reduce((accumulator, value) => accumulator + value, 0);
@@ -53,6 +55,11 @@ function changeLengthRandom(items) {
   return items.slice(0, max);
 }
 
+//обновление элементов в массиве объектов
+function updateItem(items, update) {
+  return items.map((item) => item.id === update.id ? update : item);
+}
+
 export {
   getRandomArrayElement,
   getRandomInteger,
@@ -62,5 +69,7 @@ export {
   getElementByType,
   getElementById,
   shuffle,
-  changeLengthRandom
+  changeLengthRandom,
+  isEscape,
+  updateItem
 };
