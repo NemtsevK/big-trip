@@ -1,7 +1,7 @@
-import {DateFormat} from '../const';
-import AbstractView from '../framework/view/abstract-view';
-import {getElementById, getElementByType} from '../utils/common';
-import {getDifferenceInTime, convertDate} from '../utils/date';
+import {DateFormat} from '../const.js';
+import AbstractView from '../framework/view/abstract-view.js';
+import {getElementById, getElementByType} from '../utils/common.js';
+import {getDifferenceInTime, convertDate} from '../utils/date.js';
 
 //создать элемент списка для дополнительного предложения
 function createOfferTemplate({title, price}) {
@@ -73,6 +73,7 @@ export default class PointView extends AbstractView {
     this.#destinations = destinations;
     this.#onEditClick = onEditClick;
     this.#onFavoriteClick = onFavoriteClick;
+
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
     this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClickHandler);
   }
@@ -81,13 +82,13 @@ export default class PointView extends AbstractView {
     return createPointTemplate(this.#point, this.#offers, this.#destinations);
   }
 
-  #editClickHandler = (evt) => {
-    evt.preventDefault();
+  #editClickHandler = (event) => {
+    event.preventDefault();
     this.#onEditClick();
   };
 
-  #favoriteClickHandler = (evt) => {
-    evt.preventDefault();
+  #favoriteClickHandler = (event) => {
+    event.preventDefault();
     this.#onFavoriteClick();
   };
 }

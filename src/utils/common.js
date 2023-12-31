@@ -49,7 +49,7 @@ function shuffle(items) {
   return items;
 }
 
-//изменить размер массива
+//изменить рандомно размер массива
 function changeLengthRandom(items) {
   const max = getRandomInteger(0, items.length - 1);
   return items.slice(0, max);

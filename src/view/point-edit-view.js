@@ -1,7 +1,7 @@
-import {DateFormat, POINTS_TYPE} from '../const';
-import AbstractView from '../framework/view/abstract-view';
-import {capitalize, getElementById, getElementByType} from '../utils/common';
-import {convertDate} from '../utils/date';
+import {DateFormat, POINTS_TYPE} from '../const.js';
+import AbstractView from '../framework/view/abstract-view.js';
+import {capitalize, getElementById, getElementByType} from '../utils/common.js';
+import {convertDate} from '../utils/date.js';
 
 //создать элемент списка для типов точек маршрута
 function createTypeTemplate(type, checkedType, id) {
@@ -155,6 +155,7 @@ export default class PointEditView extends AbstractView {
   #point = null;
   #offers = [];
   #destinations = [];
+
   #onFormSubmit = () => {};
   #onButtonRollupClick = () => {};
 
@@ -174,13 +175,13 @@ export default class PointEditView extends AbstractView {
     return createEditPointTemplate(this.#point, this.#offers, this.#destinations);
   }
 
-  #formSubmitHandler = (evt) => {
-    evt.preventDefault();
+  #formSubmitHandler = (event) => {
+    event.preventDefault();
     this.#onFormSubmit(this.#point);
   };
 
-  #buttonRollupClickHandler = (evt) => {
-    evt.preventDefault();
+  #buttonRollupClickHandler = (event) => {
+    event.preventDefault();
     this.#onButtonRollupClick();
   };
 }

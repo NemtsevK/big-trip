@@ -1,16 +1,16 @@
-import {render} from '../framework/render';
-import {FiltersType} from '../const';
-import SortListView from '../view/sort-list-view';
-import PointListView from '../view/point-list-view';
-import SystemMessageView from '../view/system-message-view';
-import PointPresenter from './point-presenter';
-import {updateItem} from '../utils/common';
+import {render} from '../framework/render.js';
+import {Messages} from '../const.js';
+import SortListView from '../view/sort-list-view.js';
+import PointListView from '../view/point-list-view.js';
+import MessageView from '../view/message-view.js';
+import PointPresenter from './point-presenter.js';
+import {updateItem} from '../utils/common.js';
 
 //класс для взаимодействия данных и интерфейса списка точек маршрута
 export default class TripPresenter {
-  #tripPoints = [];
-  #tripOffers = [];
-  #tripDestinations = [];
+  #points = [];
+  #offers = [];
+  #destinations = [];
 
   #tripContainer = null;
   #tripModel = null;
@@ -26,61 +26,55 @@ export default class TripPresenter {
   }
 
   init() {
-    this.#tripPoints = [...this.#tripModel.points];
-    this.#tripOffers = [...this.#tripModel.offers];
-    this.#tripDestinations = [...this.#tripModel.destinations];
+    this.#points = [...this.#tripModel.points];
+    this.#offers = [...this.#tripModel.offers];
+    this.#destinations = [...this.#tripModel.destinations];
 
     this.#renderTrip();
   }
 
-  #renderPoint({point, offers, destinations}) {
+  #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#pointListComponent.element,
       onPointChange: this.#pointChangeHandle,
-      onModeChange: this.#modeChangeHandle
+      onModeChange: this.#modeChangeHandle,
+      offers: this.#offers,
+      destinations: this.#destinations
     });
 
-    pointPresenter.init(point, offers, destinations);
+    pointPresenter.init(point);
     this.#pointPresenters.set(point.id, pointPresenter);
   }
 
   #pointChangeHandle = (updatedPoint) => {
-    this.#tripPoints = updateItem(this.#tripPoints, updatedPoint);
-    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint, this.#tripOffers, this.#tripDestinations);
+    this.#points = updateItem(this.#points, updatedPoint);
+    this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
   #modeChangeHandle = () => {
-    this.#pointPresenters.forEach((pointPresenter) => pointPresenter.resetView());
+    this.#pointPresenters.forEach((pointPresenter) => pointPresenter.reset());
   };
 
-  #renderSort() {
-    render(this.#sortListComponent, this.#tripContainer);
-  }
-
-  #renderSystemMessage({message}) {
-    this.#systemMessageComponent = new SystemMessageView({messageType: message});
+  #renderSystemMessage({text}) {
+    this.#systemMessageComponent = new MessageView({text});
     render(this.#systemMessageComponent, this.#tripContainer);
   }
 
   #renderPointsList() {
     render(this.#pointListComponent, this.#tripContainer);
 
-    this.#tripPoints.forEach((point) => {
-      this.#renderPoint({
-        point,
-        offers: this.#tripOffers,
-        destinations: this.#tripDestinations
-      });
+    this.#points.forEach((point) => {
+      this.#renderPoint(point);
     });
   }
 
   #renderTrip() {
-    if (this.#tripPoints.length === 0) {
-      this.#renderSystemMessage({message: FiltersType.EVERYTHING});
+    if (this.#points.length === 0) {
+      this.#renderSystemMessage({text: Messages.EVERYTHING});
       return;
     }
 
-    this.#renderSort();
+    render(this.#sortListComponent, this.#tripContainer);
     this.#renderPointsList();
   }
 }

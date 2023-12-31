@@ -1,5 +1,5 @@
-import {RenderPosition, render} from '../framework/render';
-import InfoView from '../view/info-view';
+import {RenderPosition, render} from '../framework/render.js';
+import InfoView from '../view/info-view.js';
 
 //класс для взаимодействия данных и интерфейса информациии о маршруте
 export default class InfoPresenter {
