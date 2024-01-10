@@ -68,6 +68,7 @@ export default class PointPresenter {
 
   reset() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   }
