@@ -1,7 +1,7 @@
 import {FiltersType} from '../const.js';
 import {isFuture, isPast, isPresent} from './date.js';
 
-const filter = {
+const Filter = {
   [FiltersType.EVERYTHING]: (points) => points,
   [FiltersType.FUTURE]: (points) => points.filter((point) => isFuture(point.dateFrom)),
   [FiltersType.PRESENT]: (points) => points.filter((point) => isPresent(point.dateFrom, point.dateTo)),
@@ -10,7 +10,7 @@ const filter = {
 
 //сформировать фильтр по точке маршрута
 function generateFilter(points) {
-  return Object.entries(filter).map(
+  return Object.entries(Filter).map(
     ([filterType, filterPoints]) => ({
       type: filterType,
       count: filterPoints(points).length,
@@ -18,4 +18,4 @@ function generateFilter(points) {
   );
 }
 
-export {filter, generateFilter};
+export {generateFilter};

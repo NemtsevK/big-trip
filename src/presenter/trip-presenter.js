@@ -36,7 +36,6 @@ export default class TripPresenter {
     this.#renderTrip();
   }
 
-
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#pointListComponent.element,
@@ -73,7 +72,7 @@ export default class TripPresenter {
   }
 
   #renderSort() {
-    this.#sortListComponent = new SortListView({ onSortTypeChange: this.#sortTypeChangeHandle});
+    this.#sortListComponent = new SortListView({onSortTypeChange: this.#sortTypeChangeHandle});
     render(this.#sortListComponent, this.#tripContainer);
   }
 

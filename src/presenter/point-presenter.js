@@ -1,6 +1,6 @@
-import { Mode } from '../const.js';
-import { remove, render, replace } from '../framework/render.js';
-import { isEscape } from '../utils/common.js';
+import {Mode} from '../const.js';
+import {remove, render, replace} from '../framework/render.js';
+import {isEscape} from '../utils/common.js';
 import PointEditView from '../view/point-edit-view.js';
 import PointView from '../view/point-view.js';
 
@@ -25,7 +25,7 @@ export default class PointPresenter {
     this.#destinations = destinations;
   }
 
-  init (point) {
+  init(point) {
     this.#point = point;
 
     const prevPointComponent = this.#pointComponent;

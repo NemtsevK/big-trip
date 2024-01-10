@@ -194,8 +194,8 @@ function getOffers() {
 
 //генерация случайного набора дополнительных предложений
 function getRandomOffers(type) {
-  const arr = getElementByType(mockOffers, type).offers.map((items) => items.id);
-  return changeLengthRandom(shuffle(arr));
+  const offersId = getElementByType(mockOffers, type).offers.map((items) => items.id);
+  return changeLengthRandom(shuffle(offersId));
 }
 
 export {getOffers, getRandomOffers};
