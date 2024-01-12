@@ -16,9 +16,9 @@ function createOfferTemplate({title, price}) {
 
 //создать точку маршрута
 function createPointTemplate(point, offers, destinations) {
-  const { type, dateFrom, dateTo, isFavorite, basePrice, offers: pointOffers, destination: pointDestination } = point;
+  const {type, dateFrom, dateTo, isFavorite, basePrice, offers: pointOffers, destination: pointDestination} = point;
   const filteredDestinationById = getElementById(destinations, pointDestination);
-  const { name } = filteredDestinationById;
+  const {name} = filteredDestinationById;
   const filteredOffersById = getElementById(getElementByType(offers, type).offers, pointOffers);
 
   return (
