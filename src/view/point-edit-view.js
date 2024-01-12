@@ -18,7 +18,7 @@ function createTypeTemplate(type, checkedType, id) {
 //создать элемент для списка дополнительных предложений
 function createOfferTemplate(offer, checkedOffersId) {
   const {id, title, price} = offer;
-  const isChecked = checkedOffersId.includes(id) ? 'checked' : '';
+  const isChecked = checkedOffersId.has(id) ? 'checked' : '';
 
   return (
     `<div class="event__offer-selector">
@@ -160,19 +160,20 @@ export default class PointEditView extends AbstractStatefulView {
 
   constructor({point, offers, destinations, onFormSubmit, onButtonRollupClick}) {
     super();
-    this._setState(PointEditView.parsePointToState(point));
     this.#offers = offers;
     this.#destinations = destinations;
     this.#onFormSubmit = onFormSubmit;
     this.#onButtonRollupClick = onButtonRollupClick;
 
+    this._setState(PointEditView.parsePointToState(point));
+    this._restoreHandlers();
+
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#buttonRollupClickHandler);
     this.element.querySelector('.event--edit').addEventListener('submit', this.#formSubmitHandler);
-
-    this._restoreHandlers();
   }
 
   get template() {
+    // console.log(this._state.offers);
     return createEditPointTemplate(this._state, this.#offers, this.#destinations);
   }
 
@@ -190,31 +191,38 @@ export default class PointEditView extends AbstractStatefulView {
     this.#onButtonRollupClick();
   };
 
-  #typeChangeHandler = (evt) => {
-    evt.preventDefault();
+  #typeChangeHandler = (event) => {
+    event.preventDefault();
 
     this.updateElement({
-      type: evt.target.value
+      type: event.target.value
     });
   };
 
-  #cityChangeHandler = (evt) => {
+  #destinationChangeHandler = (event) => {
     this.updateElement({
-      destination: this.#destinations.find((destination) => destination.name === evt.target.value).id,
+      destination: this.#destinations.find((destination) => destination.name === event.target.value).id,
     });
   };
 
-  #offerChangeHandler = () => {
-    this._setState({
-      offers: Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked')).map((item) => item.id),
-    });
+  #offerChangeHandler = (event) => {
+    const offers = this._state.offers;
+    const offerId = event.target.name;
+
+    if (offers.has(offerId)) {
+      offers.delete(offerId);
+    } else {
+      offers.add(event.target.name);
+    }
+
+    this._setState({offers: offers});
   };
 
-  #priceChangeHandler = (evt) => {
-    evt.preventDefault();
+  #priceChangeHandler = (event) => {
+    event.preventDefault();
 
     this._setState({
-      basePrice: evt.target.value,
+      basePrice: event.target.value,
     });
   };
 
@@ -222,12 +230,24 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#buttonRollupClickHandler);
     this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
-    this.element.querySelector('.event__input--destination').addEventListener('change', this.#cityChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__available-offers')?.addEventListener('change',this.#offerChangeHandler);
     this.element.querySelector('.event__field-group--price').addEventListener('input', this.#priceChangeHandler);
   }
 
-  static parsePointToState = (point) => point;
+  static parsePointToState (point) {
+    const state = {...point};
 
-  static parseStateToPoint = (state) => state;
+    state.offers = new Set(state.offers);
+
+    return state;
+  }
+
+  static parseStateToPoint (state) {
+    const point = {...state};
+
+    point.offers = Array.from(point.offers);
+
+    return point;
+  }
 }

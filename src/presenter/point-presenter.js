@@ -94,6 +94,7 @@ export default class PointPresenter {
   #escKeyDownHandler = (event) => {
     if (isEscape(event)) {
       event.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };

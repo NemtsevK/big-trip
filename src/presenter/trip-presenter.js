@@ -1,5 +1,5 @@
 import {render} from '../framework/render.js';
-import {Messages, SortTypes} from '../const.js';
+import {DEFAULT_SORT, Messages, SortType} from '../const.js';
 import SortListView from '../view/sort-list-view.js';
 import PointListView from '../view/point-list-view.js';
 import MessageView from '../view/message-view.js';
@@ -17,10 +17,10 @@ export default class TripPresenter {
   #tripContainer = null;
   #tripModel = null;
   #systemMessageComponent = null;
-  #sortListComponent = null;
 
   #pointListComponent = new PointListView();
   #pointPresenters = new Map();
+  #currentSortType = DEFAULT_SORT;
 
   constructor({tripContainer, tripModel}) {
     this.#tripContainer = tripContainer;
@@ -51,6 +51,7 @@ export default class TripPresenter {
 
   #pointChangeHandle = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
+    this.#originalPoints = updateItem(this.#originalPoints, updatedPoint);
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
@@ -60,20 +61,17 @@ export default class TripPresenter {
 
   #sortPoints(type) {
     switch (type) {
-      case SortTypes.TIME:
+      case SortType.TIME:
         this.#points.sort(sortByTime);
         break;
-      case SortTypes.PRICE:
+      case SortType.PRICE:
         this.#points.sort(sortByPrice);
         break;
       default:
         this.#points = [...this.#originalPoints];
     }
-  }
 
-  #renderSort() {
-    this.#sortListComponent = new SortListView({onSortTypeChange: this.#sortTypeChangeHandle});
-    render(this.#sortListComponent, this.#tripContainer);
+    this.#currentSortType = type;
   }
 
   #clearPointList() {
@@ -82,6 +80,10 @@ export default class TripPresenter {
   }
 
   #sortTypeChangeHandle = (type) => {
+    if (this.#currentSortType === type) {
+      return;
+    }
+
     this.#sortPoints(type);
     this.#clearPointList();
     this.#renderPointsList();
@@ -106,7 +108,7 @@ export default class TripPresenter {
       return;
     }
 
-    this.#renderSort();
+    render(new SortListView({onSortTypeChange: this.#sortTypeChangeHandle}), this.#tripContainer);
     this.#renderPointsList();
   }
 }
