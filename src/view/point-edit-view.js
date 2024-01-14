@@ -105,7 +105,6 @@ function createEditPointTemplate(point, offers, destinations) {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-
                 ${POINTS_TYPE.map((item) => createTypeTemplate(item, type, id)).join('')}
               </fieldset>
             </div>
@@ -156,11 +155,17 @@ function createEditPointTemplate(point, offers, destinations) {
 export default class PointEditView extends AbstractStatefulView {
   #offers = [];
   #destinations = [];
-  #datepickerDateFrom = null;
-  #datepickerDateTo = null;
+  #datePickerFrom = null;
+  #datePickerTo = null;
 
   #onFormSubmit = () => {};
   #onButtonRollupClick = () => {};
+
+  #configDatePicker = {
+    enableTime: true,
+    'time_24hr': true,
+    dateFormat: DateFormat.DATE_PICKER
+  };
 
   constructor({point, offers, destinations, onFormSubmit, onButtonRollupClick}) {
     super();
@@ -187,38 +192,28 @@ export default class PointEditView extends AbstractStatefulView {
   removeElement() {
     super.removeElement();
 
-    if (this.#datepickerDateFrom) {
-      this.#datepickerDateFrom.destroy();
-      this.#datepickerDateFrom = null;
+    if (this.#datePickerFrom) {
+      this.#datePickerFrom.destroy();
+      this.#datePickerFrom = null;
     }
 
-    if (this.#datepickerDateTo) {
-      this.#datepickerDateTo.destroy();
-      this.#datepickerDateTo = null;
+    if (this.#datePickerTo) {
+      this.#datePickerTo.destroy();
+      this.#datePickerTo = null;
     }
   }
 
-  #setDatepicker(dateElement, defaultDate, onChange) {
-    return flatpickr(
-      dateElement,
-      {
-        dateFormat: 'd/m/y H:i',
-        locale: {firstDayOfWeek: 1},
-        enableTime: true,
-        defaultDate: defaultDate,
-        onChange: onChange,
-        'time_24hr': true,
-      }
-    );
+  _restoreHandlers() {
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#buttonRollupClickHandler);
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__available-offers')?.addEventListener('change', this.#offerChangeHandler);
+    this.element.querySelector('.event__field-group--price').addEventListener('input', this.#priceChangeHandler);
+
+    this.#setDatePickerFrom();
+    this.#setDatePickerTo();
   }
-
-  #onDateFromChange = (newDate) => {
-    this._setState({dateFrom: newDate});
-  };
-
-  #onDateToChange = (newDate) => {
-    this._setState({dateTo: newDate});
-  };
 
   #formSubmitHandler = (event) => {
     event.preventDefault();
@@ -265,25 +260,45 @@ export default class PointEditView extends AbstractStatefulView {
     });
   };
 
-  _restoreHandlers() {
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#buttonRollupClickHandler);
-    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
-    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
-    this.element.querySelector('.event__available-offers')?.addEventListener('change', this.#offerChangeHandler);
-    this.element.querySelector('.event__field-group--price').addEventListener('input', this.#priceChangeHandler);
-
-    this.#datepickerDateFrom = this.#setDatepicker(
-      this.element.querySelector(`#event-start-time-${this._state.id}`),
-      this._state.dateFrom,
-      this.#onDateFromChange,
-    );
-    this.#datepickerDateTo = this.#setDatepicker(
-      this.element.querySelector(`#event-end-time-${this._state.id}`),
-      this._state.dateTo,
-      this.#onDateToChange,
-    );
+  #setDatePickerFrom() {
+    if (this._state.dateFrom) {
+      this.#datePickerFrom = flatpickr(
+        this.element.querySelector('input[name="event-start-time"]'),
+        {
+          ...this.#configDatePicker,
+          defaultDate: this._state.dateFrom,
+          maxDate: this._state.dateTo,
+          onChange: this.#dateFromChangeHandler,
+        },
+      );
+    }
   }
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate.toISOString(),
+    });
+  };
+
+  #setDatePickerTo() {
+    if (this._state.dateTo) {
+      this.#datePickerTo = flatpickr(
+        this.element.querySelector('input[name="event-end-time"]'),
+        {
+          ...this.#configDatePicker,
+          defaultDate: this._state.dateTo,
+          minDate: this._state.dateFrom,
+          onChange: this.#dateToChangeHandler,
+        },
+      );
+    }
+  }
+
+  #dateToChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateTo: userDate.toISOString(),
+    });
+  };
 
   static parsePointToState(point) {
     const state = {...point};

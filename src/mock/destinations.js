@@ -1,3 +1,5 @@
+import {PHOTOS_SRC} from '../const.js';
+
 //список пунктов назначения
 const mockDestinations = [
   {
@@ -6,11 +8,11 @@ const mockDestinations = [
     name: 'Amsterdam',
     pictures: [
       {
-        src: 'https://loremflickr.com/248/152/town?=1',
+        src: `${PHOTOS_SRC}1`,
         description: 'Amsterdam beautiful place'
       },
       {
-        src: 'https://loremflickr.com/248/152/town?=2',
+        src: `${PHOTOS_SRC}2`,
         description: 'Amsterdam old city'
       }
     ]
@@ -21,15 +23,15 @@ const mockDestinations = [
     name: 'Chamonix',
     pictures: [
       {
-        src: 'https://loremflickr.com/248/152/town?=3',
+        src: `${PHOTOS_SRC}3`,
         description: 'Chamonix parliament building'
       },
       {
-        src: 'https://loremflickr.com/248/152/town?=4',
+        src: `${PHOTOS_SRC}4`,
         description: 'Chamonix old city'
       },
       {
-        src: 'https://loremflickr.com/248/152/town?=5',
+        src: `${PHOTOS_SRC}5`,
         description: 'Chamonix beautiful place'
       }
     ]
