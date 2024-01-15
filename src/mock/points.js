@@ -1,5 +1,5 @@
 import {POINTS_COUNT,TIME_ZONE} from '../const.js';
-import {getRandomArrayElement, getRandomInteger} from '../utils/common.js';
+import {getRandomArrayElement, getRandomInteger} from '../utils/random.js';
 import {getRandomOffers} from './offers.js';
 
 //список точек маршрута

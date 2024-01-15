@@ -27,6 +27,19 @@ export default class TripPresenter {
     this.#tripModel = tripModel;
   }
 
+  get points() {
+    //сортировка
+    return this.#tripModel.points;
+  }
+
+  get offers() {
+    return this.#tripModel.offers;
+  }
+
+  get destinations() {
+    return this.#tripModel.destinations;
+  }
+
   init() {
     this.#points = [...this.#tripModel.points];
     this.#originalPoints = [...this.#tripModel.points];
