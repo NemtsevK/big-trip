@@ -94,6 +94,26 @@ const mockPoints = [
     offers: getRandomOffers('sightseeing'),
     type: 'sightseeing'
   },
+  {
+    id: 'p-11',
+    basePrice: getRandomInteger(10, 1000),
+    dateFrom: `2024-01-20T08:00:00.000${TIME_ZONE}`,
+    dateTo: `2024-01-30T06:25:00.000${TIME_ZONE}`,
+    destination: 'd-3',
+    isFavorite: !!getRandomInteger(0, 1),
+    offers: getRandomOffers('check-in'),
+    type: 'check-in',
+  },
+  {
+    id: 'p-12',
+    basePrice: getRandomInteger(10, 1000),
+    dateFrom: `2024-04-20T08:25:00.000${TIME_ZONE}`,
+    dateTo: `2024-04-20T09:25:00.000${TIME_ZONE}`,
+    destination: 'd-3',
+    isFavorite: !!getRandomInteger(0, 1),
+    offers: getRandomOffers('bus'),
+    type: 'bus',
+  },
 ];
 
 //генерация случайного набора точек маршрута

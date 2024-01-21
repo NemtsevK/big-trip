@@ -1,3 +1,6 @@
+import {SortType} from '../const.js';
+import {compareDurations, sortByDate} from './date.js';
+
 //получить названия пунктов назначения
 const getDestinationNames = (destinations, points = []) => {
   if (points.length > 0) {
@@ -5,9 +8,6 @@ const getDestinationNames = (destinations, points = []) => {
   }
   return [...new Set(destinations.map((destination) => destination.name))];
 };
-
-//преобразовать строку, чтобы начиналась с заглавной буквы
-const capitalize = (item) => item.charAt(0).toUpperCase() + item.substring(1);
 
 const isEscape = (event) => event.key === 'Escape';
 
@@ -35,16 +35,27 @@ function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
-//сортировка по цене
-const sortByPrice = (a, b) => b.basePrice - a.basePrice;
+//сортировка точек маршрута
+function sortPoints(name, points) {
+  switch (name) {
+    case SortType.DAY.name:
+      points.sort((firstPoint, secondPoint) => sortByDate(firstPoint, secondPoint));
+      break;
+    case SortType.PRICE.name:
+      points.sort((firstPoint, secondPoint) => secondPoint.basePrice - firstPoint.basePrice);
+      break;
+    case SortType.TIME.name:
+      points.sort((firstPoint, secondPoint) => compareDurations(firstPoint, secondPoint));
+      break;
+  }
+}
 
 export {
   getDestinationNames,
-  capitalize,
   getFullPrice,
   getElementByType,
   getElementById,
   isEscape,
   updateItem,
-  sortByPrice,
+  sortPoints,
 };
