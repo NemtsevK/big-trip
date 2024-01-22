@@ -108,7 +108,7 @@ export default class PointPresenter {
   //отобразить форму добавления/редактирования точки маршрута
   #renderEventForm() {
     this.#eventFormComponent = new EventForm({onFormSubmit: this.#closeForm});
-    this.#eventFormElement = this.#eventFormComponent.element.querySelector('form');
+    this.#eventFormElement = this.#eventFormComponent.element.querySelector('.event--edit');
     this.#formHeader = new EventFormHeader({
       point: this.#content.point,
       destinations: this.#destinations,

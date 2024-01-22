@@ -150,17 +150,15 @@ export default class EventFormHeader extends AbstractStatefulView {
 
   //установить дату и время начала точки маршрута
   #setDatePickerFrom() {
-    if (this._state.dateFrom) {
-      this.#datePickerFrom = flatpickr(
-        this.element.querySelector('input[name="event-start-time"]'),
-        {
-          ...CONFIG_DATE_PICKER,
-          defaultDate: this._state.dateFrom,
-          maxDate: this._state.dateTo,
-          onChange: this.#dateFromChangeHandler,
-        },
-      );
-    }
+    this.#datePickerFrom = flatpickr(
+      this.element.querySelector('.event__input--time[name="event-start-time"]'),
+      {
+        ...CONFIG_DATE_PICKER,
+        defaultDate: this._state.dateFrom,
+        maxDate: this._state.dateTo,
+        onChange: this.#dateFromChangeHandler,
+      },
+    );
   }
 
   //событие изменение даты и время начала точки маршрута
@@ -172,17 +170,15 @@ export default class EventFormHeader extends AbstractStatefulView {
 
   //установить дату и время окончания точки маршрута
   #setDatePickerTo() {
-    if (this._state.dateTo) {
-      this.#datePickerTo = flatpickr(
-        this.element.querySelector('input[name="event-end-time"]'),
-        {
-          ...CONFIG_DATE_PICKER,
-          defaultDate: this._state.dateTo,
-          minDate: this._state.dateFrom,
-          onChange: this.#dateToChangeHandler,
-        },
-      );
-    }
+    this.#datePickerTo = flatpickr(
+      this.element.querySelector('.event__input--time[name="event-end-time"]'),
+      {
+        ...CONFIG_DATE_PICKER,
+        defaultDate: this._state.dateTo,
+        minDate: this._state.dateFrom,
+        onChange: this.#dateToChangeHandler,
+      },
+    );
   }
 
   //событие изменение даты и время окончания точки маршрута

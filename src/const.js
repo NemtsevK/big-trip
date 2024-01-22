@@ -75,9 +75,9 @@ const BLANK_POINT = {
   'id': 0,
   'type': POINTS_TYPE[5].toLowerCase(),
   'destination': '',
-  'dateFrom': null,
-  'dateTo': null,
-  'basePrice': '',
+  'dateFrom': '',
+  'dateTo': '',
+  'basePrice': 0,
   'offers': [],
   'isFavorite': false,
 };
@@ -85,7 +85,7 @@ const BLANK_POINT = {
 const CONFIG_DATE_PICKER = {
   enableTime: true,
   'time_24hr': true,
-  dateFormat: DateFormat.DATE_PICKER
+  dateFormat: DateFormat.DATE_PICKER,
 };
 
 export {
