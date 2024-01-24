@@ -25,11 +25,11 @@ function createPointTypeTemplate(item) {
 }
 
 //создать кнопки в форме добавления/редактирования точки маршрута
-function createButtonsTemplate(mode) {
+function createButtonsTemplate(mode, isDeleting) {
   if (mode === ModeType.EDIT) {
     return (
-      '<button class="event__reset-btn" type="reset">Delete</button>' +
-      '<button class="event__rollup-btn" type="button"><span class="visually-hidden">Open event</span></button>'
+      `<button class="event__reset-btn" type="reset">${(isDeleting) ? 'Deleting' : 'Delete'}</button>
+      <button class="event__rollup-btn" type="button"><span class="visually-hidden">Open event</span></button>`
     );
   }
 
@@ -84,7 +84,7 @@ function createEventFormHeaderTemplate (point, destinations, mode){
     </div>
 
     <button class="event__save-btn btn btn--blue" type="submit">Save</button>
-      ${createButtonsTemplate(mode)}
+      ${createButtonsTemplate(mode, point.isDeleting)}
     </header>`
   );
 }
@@ -109,6 +109,11 @@ export default class EventFormHeader extends AbstractStatefulView {
     this.#point = point;
     this.#destinations = destinations;
     this.#mode = mode;
+    this._setState({
+      ...point,
+      isSaving: false,
+      isDeleting: false
+    });
     this.#onTypeChange = onTypeChange;
     this.#onDestinationChange = onDestinationChange;
     this.#onSubmit = onSubmit;
@@ -222,11 +227,10 @@ export default class EventFormHeader extends AbstractStatefulView {
   //событие клик по кнопке сохранить
   #buttonSaveClickHandler = (event) => {
     event.preventDefault();
-    if (this.#mode === ModeType.NEW) {
-      this._setState({id: 53125});
-    }
     const actionType = (this.#mode === ModeType.EDIT) ? UserAction.UPDATE_EVENT : UserAction.ADD_EVENT;
     const updateType = getUpdateType(this.#point, this._state);
+    delete this._state.isDeleting;
+    delete this._state.isSaving;
     this.#onSubmit(actionType, updateType, this._state);
   };
 

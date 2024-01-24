@@ -21,13 +21,15 @@ export default class PointPresenter {
 
   #handleModeChange = () => {};
   #onDataChange = () => {};
+  #handleCancelButtonClick = () => {};
 
-  constructor({container, destinations, offers, onDataChange, onModeChange, mode}) {
+  constructor({container, destinations, offers, onDataChange, onModeChange, onCancelButtonClick, mode}) {
     this.#pointListContainer = container;
     this.#destinations = destinations;
     this.#offers = offers;
     this.#onDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
+    this.#handleCancelButtonClick = onCancelButtonClick;
     this.#mode = mode;
   }
 
@@ -78,6 +80,55 @@ export default class PointPresenter {
     remove(this.#eventFormComponent);
   }
 
+  setSavingMode() {
+    if (this.#mode !== ModeType.DEFAULT) {
+      this.#formHeader.updateElement({
+        isSaving: true
+      });
+      this.#eventFormComponent.updateElement({
+        isDisabled: true
+      });
+      this.#eventFormElement = this.#eventFormComponent.element.querySelector('form');
+      render(this.#formHeader, this.#eventFormElement);
+      render(this.#formDetails, this.#eventFormElement);
+
+    }
+  }
+
+  setDeletingMode() {
+    if (this.#mode !== ModeType.DEFAULT) {
+      this.#eventFormComponent.updateElement({
+        isDisabled: true
+      });
+      this.#eventFormElement = this.#eventFormComponent.element.querySelector('form');
+      render(this.#formHeader, this.#eventFormElement);
+      render(this.#formDetails, this.#eventFormElement);
+      this.#formHeader.updateElement({
+        isDeleting: true
+      });
+    }
+  }
+
+  setAborting() {
+    const resetFormElement = () => {
+      this.#eventFormComponent.updateElement({
+        isDisabled: false
+      });
+      this.#eventFormElement = this.#eventFormComponent.element.querySelector('form');
+      render(this.#formHeader, this.#eventFormElement);
+      render(this.#formDetails, this.#eventFormElement);
+      this.#formHeader.updateElement({
+        isDeleting: false,
+        isSaving: false
+      });
+    };
+    if (this.#mode !== ModeType.DEFAULT) {
+      this.#eventFormComponent.shake(resetFormElement);
+    } else {
+      this.#pointComponent.shake();
+    }
+  }
+
   //отобразить точку маршрута
   #renderTripPoint() {
     this.#pointComponent = new PointView({
@@ -97,6 +148,7 @@ export default class PointPresenter {
   #closeForm = () => {
     if (this.#mode === ModeType.NEW) {
       remove(this.#eventFormComponent);
+      this.#handleCancelButtonClick();
     } else {
       this.#replaceFormToPoint();
       this.#formHeader.resetState();
@@ -176,13 +228,11 @@ export default class PointPresenter {
 
   //событие клик по кнопке удаления формы редактирования точки маршрута
   #onButtonDeleteClick = (point) => {
-    this.#closeForm();
     this.#onDataChange(UserAction.DELETE_EVENT, UpdateType.MINOR, point);
   };
 
   //событие сохранить форму добавления/изменения точки маршрута
   #onFormSubmit = (actionType, updateType, newPoint) => {
-    this.#closeForm();
     this.#onDataChange(actionType, updateType, newPoint);
   };
 }

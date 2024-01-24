@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
 //создать блок формы создания/редактирования точки маршрута
 function createEventFormTemplate() {
@@ -10,17 +10,22 @@ function createEventFormTemplate() {
 }
 
 //класс для визуального представления формы создания/редактирования точки маршрута
-export default class EventForm extends AbstractView {
+export default class EventForm extends AbstractStatefulView {
   #onFormSubmit = null;
 
   constructor({onFormSubmit}) {
     super();
     this.#onFormSubmit = onFormSubmit;
-    this.element.querySelector('.event--edit').addEventListener('submit', this.#eventFormSubmitHandler);
+    this._restoreHandlers();
+    this._setState({'isDisabled': false});
   }
 
   get template() {
     return createEventFormTemplate();
+  }
+
+  _restoreHandlers() {
+    this.element.querySelector('.event--edit').addEventListener('submit', this.#eventFormSubmitHandler);
   }
 
   //событие закрыть форму

@@ -1,12 +1,8 @@
-const POINTS_COUNT = 8;
-
 const MILLISECONDS_IN_MINUTE = 60000;
 
 const MILLISECONDS_IN_HOUR = MILLISECONDS_IN_MINUTE * 60;
 
 const MILLISECONDS_IN_DAY = MILLISECONDS_IN_HOUR * 24;
-
-const TIME_ZONE = '+03:00';
 
 const DateFormat = {
   DAY_MONTH: 'D MMM',
@@ -20,8 +16,6 @@ const DateFormat = {
   DATE_TIME: 'YYYY-MM-DDTHH:mm',
 };
 
-const PHOTOS_SRC = 'https://loremflickr.com/248/152?random=';
-
 const FilterType = {
   EVERYTHING: 'EVERYTHING',
   FUTURE: 'FUTURE',
@@ -34,6 +28,11 @@ const Messages = {
   PAST: 'There are no past events now',
   PRESENT: 'There are no present events now',
   FUTURE: 'There are no future events now',
+};
+
+const InfoMessages = {
+  LOADING: 'Loading...',
+  ERROR: 'Failed to load latest route information',
 };
 
 const DEFAULT_FILTER = FilterType.EVERYTHING;
@@ -69,6 +68,7 @@ const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
+  ERROR: 'ERROR',
 };
 
 const BLANK_POINT = {
@@ -88,14 +88,26 @@ const CONFIG_DATE_PICKER = {
   dateFormat: DateFormat.DATE_PICKER,
 };
 
+const ApiMethod = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE'
+};
+
+const BlockerTimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
+
+const BASE_URL = 'https://21.objects.pages.academy/big-trip';
+const AUTHORIZATION_STRING = 'Basic 2329089bigtrip22';
+
 export {
-  POINTS_COUNT,
   MILLISECONDS_IN_MINUTE,
   MILLISECONDS_IN_HOUR,
   MILLISECONDS_IN_DAY,
-  TIME_ZONE,
   DateFormat,
-  PHOTOS_SRC,
   FilterType,
   DEFAULT_FILTER,
   SortType,
@@ -103,9 +115,14 @@ export {
   POINTS_TYPE,
   COUNT_DESTINATIONS_NAMES,
   Messages,
+  InfoMessages,
   ModeType,
   UserAction,
   UpdateType,
   BLANK_POINT,
   CONFIG_DATE_PICKER,
+  ApiMethod,
+  BlockerTimeLimit,
+  BASE_URL,
+  AUTHORIZATION_STRING,
 };
