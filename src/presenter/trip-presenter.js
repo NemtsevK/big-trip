@@ -49,16 +49,18 @@ export default class TripPresenter {
   //отобразить основную область страницы
   #renderPageMain() {
     const filteredPoints = filterPoints(this.#filterModel.filter, this.#tripModel.tripPoints);
+
     if (filteredPoints.length === 0) {
       remove(this.#sortViewComponent);
       this.#sortViewComponent = null;
       this.#renderEmptyPointsList();
-    } else {
-      remove(this.#infoMessageComponent);
-      this.#renderSort();
-      this.#renderTripPoints(filteredPoints);
-      render(this.#listComponent, this.#listContainer);
+      return;
     }
+
+    remove(this.#infoMessageComponent);
+    this.#renderSort();
+    this.#renderTripPoints(filteredPoints);
+    render(this.#listComponent, this.#listContainer);
   }
 
   //отобразить информацию о путешествии
@@ -119,7 +121,7 @@ export default class TripPresenter {
 
   //очистить все точки маршрута и их презентеры
   #clearTripPoints() {
-    this.#pointPresenters.forEach((tripPoint) => tripPoint.destroy());
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
   }
 
@@ -201,7 +203,7 @@ export default class TripPresenter {
       offers: this.#tripModel.offers,
       onDataChange: this.#onDataChange,
       onModeChange: this.#onModeChange,
-      mode: ModeType.NEW
+      mode: ModeType.NEW,
     });
 
     this.#currentSort = DEFAULT_SORT;

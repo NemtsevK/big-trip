@@ -222,9 +222,6 @@ export default class EventFormHeader extends AbstractStatefulView {
   //событие клик по кнопке сохранить
   #buttonSaveClickHandler = (event) => {
     event.preventDefault();
-    if (this.#mode === ModeType.NEW) {
-      this._setState({id: 53125});
-    }
     const actionType = (this.#mode === ModeType.EDIT) ? UserAction.UPDATE_EVENT : UserAction.ADD_EVENT;
     const updateType = getUpdateType(this.#point, this._state);
     this.#onSubmit(actionType, updateType, this._state);

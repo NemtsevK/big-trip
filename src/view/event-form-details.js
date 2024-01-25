@@ -60,11 +60,11 @@ function createDestination(destination) {
 
 //создать блок с основным содержанием формы добавления/редактирования точки маршрута
 function createEventFormDetailsTemplate(point, offers, destination) {
-  offers = offers.find((item) => item.type === point.type.toLowerCase()).offers;
+  const offersPoint = offers.find((item) => item.type === point.type.toLowerCase()).offers;
 
   return (
     `<section class="event__details">
-      ${createOffersListTemplate(point.offers, offers)}
+      ${createOffersListTemplate(point.offers, offersPoint)}
       ${createDestination(destination)}
     </section>`
   );
