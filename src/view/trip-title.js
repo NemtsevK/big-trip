@@ -1,41 +1,59 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {getDestinationNames} from '../utils/common.js';
-import {getMaxDate, getMinDate} from '../utils/date.js';
-import {COUNT_DESTINATIONS_NAMES} from '../const.js';
+import {convertDate} from '../utils/date.js';
+import {DateFormat} from '../const.js';
 
-//создать заголовок из списка пунктов назначения
-function createTitle(points, destinations) {
-  const filterPointsByNames = getDestinationNames(destinations, points);
-
-  if (filterPointsByNames.length > COUNT_DESTINATIONS_NAMES) {
-    return `${filterPointsByNames.at(0)} &mdash;...&mdash; ${filterPointsByNames.at(-1)}`;
+//преобразовать названия пунктов назначения
+const renderDestinations = ({firstDestination, secondDestination, lastDestination, destinationsCount}) => {
+  switch (destinationsCount) {
+    case 1:
+      lastDestination = '';
+      secondDestination = '';
+      break;
+    case 2:
+      secondDestination = '&mdash;';
+      break;
+    case 3:
+      secondDestination = `- ${secondDestination} &mdash;`;
+      break;
+    default:
+      secondDestination = '&mdash; ... &mdash;';
+      break;
   }
+  return `${firstDestination} ${secondDestination} ${lastDestination}`;
+};
 
-  return filterPointsByNames.join(' &mdash; ');
-}
+//получить начальную и конечные даты путешествия
+const renderDates = ({firstDate, lastDate}) => {
+  const dateFormat = DateFormat.MONTH_DAY.split(' ').reverse().join(' ');
+  const [firstDay, firstMonth] = convertDate(firstDate, dateFormat).split(' ');
+  const [secondDay, secondMonth] = convertDate(lastDate, dateFormat).split(' ');
+
+  return `${firstDay} ${firstMonth} &mdash; ${secondDay} ${secondMonth}`;
+};
 
 //создать блок заголовка путешествия
-function createTripTitleTemplate(points, destinations) {
+function createTripTitleTemplate(destinations, dates) {
   return (
     `<div class="trip-info__main">
-      <h1 class="trip-info__title">${createTitle(points, destinations)}</h1>
-      <p class="trip-info__dates">${getMinDate(points)}&nbsp;&mdash;&nbsp;${getMaxDate(points)}</p>
+      <h1 class="trip-info__title">${renderDestinations(destinations)}</h1>
+      <p class="trip-info__dates">${renderDates(dates)}</p>
     </div>`
   );
 }
 
 //класс для визуального представления заголовка путешествия
 export default class TripTitle extends AbstractView {
-  #points = [];
-  #destinations = [];
+  #destinations = null;
+  #dates = null;
 
-  constructor({points, destinations}) {
+  constructor({destinations, dates}) {
     super();
-    this.#points = points;
+
     this.#destinations = destinations;
+    this.#dates = dates;
   }
 
   get template() {
-    return createTripTitleTemplate(this.#points, this.#destinations);
+    return createTripTitleTemplate(this.#destinations, this.#dates);
   }
 }

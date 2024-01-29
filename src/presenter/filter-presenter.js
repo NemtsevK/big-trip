@@ -1,4 +1,4 @@
-import {render,replace,remove} from '../framework/render.js';
+import {render, replace, remove} from '../framework/render.js';
 import FilterListView from '../view/filter-list-view.js';
 import {FilterType, UpdateType} from '../const';
 import {filterPoints} from '../utils/date.js';
@@ -10,7 +10,7 @@ export default class FilterPresenter {
   #filterModel = null;
   #filterComponent = null;
 
-  constructor({ container, filterModel, tripModel }) {
+  constructor({container, filterModel, tripModel}) {
     this.#container = container;
     this.#tripModel = tripModel;
     this.#filterModel = filterModel;
@@ -29,8 +29,7 @@ export default class FilterPresenter {
 
   init() {
     const previousFilterComponent = this.#filterComponent;
-
-    const newFilterComponent = new FilterListView({filters: this.filters , onFilterChange: this.#onFilterChange});
+    const newFilterComponent = new FilterListView({filters: this.filters, onFilterChange: this.#onFilterChange});
 
     if (previousFilterComponent === null) {
       render(newFilterComponent, this.#container);

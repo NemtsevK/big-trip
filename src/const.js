@@ -23,7 +23,7 @@ const FilterType = {
   PAST: 'PAST',
 };
 
-const Messages = {
+const EmptyListMessage = {
   EVERYTHING: 'Click New Event to create your first point',
   PAST: 'There are no past events now',
   PRESENT: 'There are no present events now',
@@ -49,8 +49,6 @@ const DEFAULT_SORT = SortType.DAY.name;
 
 const POINTS_TYPE = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
 
-const COUNT_DESTINATIONS_NAMES = 3;
-
 const ModeType = {
   DEFAULT: 'DEFAULT',
   EDIT: 'EDIT',
@@ -72,12 +70,11 @@ const UpdateType = {
 };
 
 const BLANK_POINT = {
-  'id': 0,
   'type': POINTS_TYPE[5].toLowerCase(),
   'destination': '',
   'dateFrom': '',
   'dateTo': '',
-  'basePrice': 0,
+  'basePrice': '0',
   'offers': [],
   'isFavorite': false,
 };
@@ -100,7 +97,7 @@ const BlockerTimeLimit = {
   UPPER_LIMIT: 1000,
 };
 
-const BASE_URL = 'https://21.objects.pages.academy/big-trip';
+const BASE_URL = 'https://22.objects.htmlacademy.pro/big-trip';
 const AUTHORIZATION_STRING = 'Basic 2329089bigtrip22';
 
 export {
@@ -113,8 +110,7 @@ export {
   SortType,
   DEFAULT_SORT,
   POINTS_TYPE,
-  COUNT_DESTINATIONS_NAMES,
-  Messages,
+  EmptyListMessage,
   InfoMessages,
   ModeType,
   UserAction,

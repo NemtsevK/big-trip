@@ -36,12 +36,12 @@ export default class TripModel extends Observable {
       this.#tripPoints = points.map(this.#adaptPointToClient);
       this.#destinations = await this.#apiService.destinations;
       this.#offers = await this.#apiService.offers;
-      this._notify(UpdateType.INIT);
-    } catch {
+      this._notify(UpdateType.INIT, null);
+    } catch (error) {
       this.#tripPoints = [];
       this.#destinations = [];
       this.#offers = [];
-      this._notify(UpdateType.ERROR);
+      this._notify(UpdateType.ERROR, null);
     }
   }
 
@@ -64,8 +64,7 @@ export default class TripModel extends Observable {
       const newPoint = this.#adaptPointToClient(response);
       this.#tripPoints = updateItem(this.#tripPoints, newPoint);
       this._notify(updateType, newPoint.id);
-
-    } catch (err) {
+    } catch (error) {
       throw new Error('Can\'t update point');
     }
   }
@@ -76,9 +75,8 @@ export default class TripModel extends Observable {
       const newPoint = await this.#apiService.addPoint(addedPoint);
       this.#tripPoints.push(this.#adaptPointToClient(newPoint));
       this._notify(updateType, newPoint.id);
-
     } catch (error) {
-      throw new Error('Can\'t add point');
+      throw new Error(`Can't add point. ${error}`);
     }
   }
 
@@ -89,7 +87,7 @@ export default class TripModel extends Observable {
 
       if (response.ok) {
         this.#tripPoints = this.#tripPoints.filter((item) => item.id !== deletedPoint.id);
-        this._notify(updateType);
+        this._notify(updateType, null);
       }
 
     } catch (error) {

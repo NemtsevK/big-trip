@@ -1,18 +1,10 @@
 import dayjs from 'dayjs';
-import minMax from 'dayjs/plugin/minMax';
 import duration from 'dayjs/plugin/duration';
 import {DateFormat, MILLISECONDS_IN_HOUR, MILLISECONDS_IN_DAY, FilterType} from '../const.js';
 import isBetween from 'dayjs/plugin/isBetween';
 
-dayjs.extend(minMax);
 dayjs.extend(duration);
 dayjs.extend(isBetween);
-
-//получить самую раннюю дату из точек маршрута
-const getMinDate = (items) => convertDate(dayjs.min(items.map((item) => dayjs(item.dateFrom))), DateFormat.DAY_MONTH);
-
-//получить самую позднюю дату из точек маршрута
-const getMaxDate = (items) => convertDate(dayjs.max(items.map((item) => dayjs(item.dateTo))), DateFormat.DAY_MONTH);
 
 //преобразование даты
 function convertDate(date, format) {
@@ -61,8 +53,6 @@ function filterPoints(name, points) {
 export {
   convertDate,
   getDifferenceInTime,
-  getMinDate,
-  getMaxDate,
   sortByDate,
   compareDurations,
   filterPoints,

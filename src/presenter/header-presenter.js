@@ -13,14 +13,50 @@ export default class HeaderPresenter {
   #offers = null;
 
   constructor({headerContainer, tripModel}) {
-    // console.log('tripModel при инициализации:', tripModel);
     this.#headerContainer = headerContainer;
     this.#tripModel = tripModel;
-    // console.log('this.#tripModel:', this.#tripModel);
     this.#tripModel.addObserver(this.#handleModelChange);
   }
 
-  #tripTitleData(points) {
+  //
+  #handleModelChange = (updateType) => {
+    if (updateType !== UpdateType.ERROR) {
+      this.#renderHeader();
+    }
+  };
+
+  //отобразить шапку сайта
+  #renderHeader() {
+    this.#destinations = this.#tripModel.destinations;
+    this.#offers = this.#tripModel.offers;
+    const points = this.#tripModel.tripPoints;
+
+    if (points.length > 0) {
+      sortPoints(DEFAULT_SORT, points);
+      const destinations = this.#getTripTitleData(points);
+      const dates = this.#getFirstLastDates(points);
+      const previousTripInfoComponent = this.#tripInfoComponent;
+      const newTripInfoComponent = new TripInfo();
+
+      if (previousTripInfoComponent === null) {
+        render(newTripInfoComponent, this.#headerContainer, RenderPosition.AFTERBEGIN);
+      } else {
+        replace(newTripInfoComponent, previousTripInfoComponent);
+        remove(previousTripInfoComponent);
+      }
+
+      render(new TripTitle({destinations, dates}), newTripInfoComponent.element);
+      render(new TripCost(this.#calculateTotalPrice(points)), newTripInfoComponent.element);
+      this.#tripInfoComponent = newTripInfoComponent;
+      return;
+    }
+
+    remove(this.#tripInfoComponent);
+    this.#tripInfoComponent = null;
+  }
+
+  //получить данные о путешествии для шапки
+  #getTripTitleData(points) {
     const destinationsId = points.map(({destination}) => destination);
     const destinationsCount = new Set(destinationsId);
     const firstDestinationId = destinationsId[0];
@@ -34,13 +70,15 @@ export default class HeaderPresenter {
     };
   }
 
-  #dateFieldData(points) {
+  //получить первую и последнюю дату путешествия
+  #getFirstLastDates(points) {
     return {
       firstDate: points[0].dateFrom,
-      secondDate: points[points.length - 1].dateTo
+      lastDate: points[points.length - 1].dateTo
     };
   }
 
+  //подсчитать общую стоимость путешествия
   #calculateTotalPrice(points) {
     return points.reduce((sum, point) => {
       sum += point.basePrice + this.#calculateOffersPrice(point.offers, point.type);
@@ -48,47 +86,15 @@ export default class HeaderPresenter {
     }, 0);
   }
 
+  //подсчитать стоимость дополнительных предложений
   #calculateOffersPrice(selectedOffers, type) {
     const offers = this.#offers.find((item) => item.type === type).offers;
     return offers.reduce((sum, item) => {
-      if (selectedOffers.includes(item.id)) {
-        sum += item.price;
+      const {id, price} = item;
+      if (selectedOffers.includes(id)) {
+        sum += price;
       }
       return sum;
     }, 0);
   }
-
-  #renderHeader() {
-    this.#destinations = this.#tripModel.destinations;
-    this.#offers = this.#tripModel.offers;
-
-    const points = this.#tripModel.tripPoints;
-    if (points.length > 0) {
-      sortPoints(DEFAULT_SORT, points);
-      const destinations = this.#tripTitleData(points);
-      const dates = this.#dateFieldData(points);
-
-      const previousTripInfoComponent = this.#tripInfoComponent;
-
-      const newTripInfoComponent = new TripInfo();
-      if (previousTripInfoComponent === null) {
-        render(newTripInfoComponent, this.#headerContainer, RenderPosition.AFTERBEGIN);
-      } else {
-        replace(newTripInfoComponent, previousTripInfoComponent);
-        remove(previousTripInfoComponent);
-      }
-      render(new TripTitle({destinations, dates}), newTripInfoComponent.element);
-      render(new TripCost(this.#calculateTotalPrice(points)), newTripInfoComponent.element);
-      this.#tripInfoComponent = newTripInfoComponent;
-    } else {
-      remove(this.#tripInfoComponent);
-      this.#tripInfoComponent = null;
-    }
-  }
-
-  #handleModelChange = (updateType) => {
-    if (updateType !== UpdateType.ERROR) {
-      this.#renderHeader();
-    }
-  };
 }

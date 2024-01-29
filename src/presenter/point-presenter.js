@@ -43,29 +43,30 @@ export default class PointPresenter {
       this.#renderEventForm();
       document.addEventListener('keydown', this.#escKeyDownHandler);
       render(this.#eventFormComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
+      return;
+    }
+
+    this.#content = content;
+
+    const previousTripPoint = this.#pointComponent;
+    const previousEventForm = this.#eventFormComponent;
+
+    this.#renderTripPoint();
+    this.#renderEventForm();
+
+    if (previousEventForm === null || previousTripPoint === null) {
+      render(this.#pointComponent, this.#pointListContainer);
     } else {
-      this.#content = content;
-
-      const previousTripPoint = this.#pointComponent;
-      const previousEventForm = this.#eventFormComponent;
-
-      this.#renderTripPoint();
-      this.#renderEventForm();
-
-      if (previousEventForm === null || previousTripPoint === null) {
-        render(this.#pointComponent, this.#pointListContainer);
-      } else {
-        if (this.#pointListContainer.contains(previousTripPoint.element)) {
-          replace(this.#pointComponent, previousTripPoint);
-        }
-
-        if (this.#mode && this.#pointListContainer.contains(previousEventForm.element)) {
-          replace(this.#eventFormComponent, previousEventForm);
-        }
-
-        remove(previousTripPoint);
-        remove(previousEventForm);
+      if (this.#pointListContainer.contains(previousTripPoint.element)) {
+        replace(this.#pointComponent, previousTripPoint);
       }
+
+      if (this.#mode && this.#pointListContainer.contains(previousEventForm.element)) {
+        replace(this.#eventFormComponent, previousEventForm);
+      }
+
+      remove(previousTripPoint);
+      remove(previousEventForm);
     }
   }
 

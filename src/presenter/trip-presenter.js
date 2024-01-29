@@ -1,5 +1,5 @@
 import {render, remove, replace} from '../framework/render.js';
-import {Messages, InfoMessages, UpdateType, UserAction, DEFAULT_SORT, DEFAULT_FILTER, ModeType, BlockerTimeLimit} from '../const.js';
+import {EmptyListMessage, InfoMessages, UpdateType, UserAction, DEFAULT_SORT, DEFAULT_FILTER, ModeType, BlockerTimeLimit} from '../const.js';
 import SortListView from '../view/sort-list-view.js';
 import PointListView from '../view/point-list-view.js';
 import MessageView from '../view/message-view.js';
@@ -45,7 +45,7 @@ export default class TripPresenter {
     this.#renderNewEventButton();
     if (this.#isLoading) {
       remove(this.#errorMessageComponent);
-      this.#loadingComponent = new MessageView({message: InfoMessages.LOADING});
+      this.#loadingComponent = new MessageView({text: InfoMessages.LOADING});
       render(this.#loadingComponent, this.#listContainer);
     } else {
       this.#renderPageMain();
@@ -88,7 +88,7 @@ export default class TripPresenter {
   //отобразить компонент без точек маршрута
   #renderEmptyPointsList() {
     if (!this.#infoMessageComponent) {
-      this.#infoMessageComponent = new MessageView({text: Messages[this.#filterModel.filter.toUpperCase()]});
+      this.#infoMessageComponent = new MessageView({text: EmptyListMessage[this.#filterModel.filter.toUpperCase()]});
       render(this.#infoMessageComponent, this.#listContainer);
     }
   }
@@ -126,7 +126,7 @@ export default class TripPresenter {
           await this.#tripModel.addPoint(updateType, newPoint);
           this.#newPointPresenter.destroy();
           this.#newEventButtonComponent.updateElement({isDisabled: false});
-        } catch (err) {
+        } catch (error) {
           this.#newPointPresenter.setAborting();
         }
         break;
@@ -134,7 +134,7 @@ export default class TripPresenter {
         this.#pointPresenters.get(newPoint.id).setSavingMode();
         try {
           await this.#tripModel.updatePoint(updateType, newPoint);
-        } catch (err) {
+        } catch (error) {
           this.#pointPresenters.get(newPoint.id).setAborting();
         }
         break;
@@ -142,7 +142,7 @@ export default class TripPresenter {
         this.#pointPresenters.get(newPoint.id).setDeletingMode();
         try {
           await this.#tripModel.deletePoint(updateType, newPoint);
-        } catch (err) {
+        } catch (error) {
           this.#pointPresenters.get(newPoint.id).setAborting();
         }
         break;
