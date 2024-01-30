@@ -19,17 +19,17 @@ export default class PointPresenter {
   #formHeader = null;
   #mode = null;
 
-  #handleModeChange = () => {};
+  #onModeChange = () => {};
   #onDataChange = () => {};
-  #handleCancelButtonClick = () => {};
+  #onCancelButtonClick = () => {};
 
   constructor({container, destinations, offers, onDataChange, onModeChange, onCancelButtonClick, mode}) {
     this.#pointListContainer = container;
     this.#destinations = destinations;
     this.#offers = offers;
     this.#onDataChange = onDataChange;
-    this.#handleModeChange = onModeChange;
-    this.#handleCancelButtonClick = onCancelButtonClick;
+    this.#onModeChange = onModeChange;
+    this.#onCancelButtonClick = onCancelButtonClick;
     this.#mode = mode;
   }
 
@@ -120,11 +120,13 @@ export default class PointPresenter {
         isSaving: false
       });
     };
+
     if (this.#mode !== ModeType.DEFAULT) {
       this.#eventFormComponent.shake(resetFormElement);
-    } else {
-      this.#pointComponent.shake();
+      return;
     }
+
+    this.#pointComponent.shake();
   }
 
   //отобразить точку маршрута
@@ -148,12 +150,13 @@ export default class PointPresenter {
   #closeForm = () => {
     if (this.#mode === ModeType.NEW) {
       remove(this.#eventFormComponent);
-      this.#handleCancelButtonClick();
+      this.#onCancelButtonClick();
     } else {
       this.#replaceFormToPoint();
       this.#formHeader.resetState();
       this.#formDetails.resetState();
     }
+
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
@@ -192,7 +195,7 @@ export default class PointPresenter {
   //изменить точку маршрута на форму добавления/редактирования
   #replacePointToForm() {
     this.#mode = ModeType.EDIT;
-    this.#handleModeChange(this.#content.point.id);
+    this.#onModeChange(this.#content.point.id);
     replace(this.#eventFormComponent, this.#pointComponent);
   }
 

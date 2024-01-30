@@ -37,6 +37,7 @@ const sortByDate = (firstPoint, secondPoint) => dayjs(firstPoint.dateFrom) - day
 function compareDurations(firstPoint, secondPoint) {
   const firstPointDuration = dayjs.duration(dayjs(firstPoint.dateTo).diff(dayjs(firstPoint.dateFrom))).asMilliseconds();
   const secondPointDuration = dayjs.duration(dayjs(secondPoint.dateTo).diff(dayjs(secondPoint.dateFrom))).asMilliseconds();
+
   return secondPointDuration - firstPointDuration;
 }
 

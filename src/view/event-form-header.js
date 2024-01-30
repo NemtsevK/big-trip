@@ -16,6 +16,7 @@ function createPointTypeTemplate(item) {
   const {type, id} = item;
   const isChecked = (type === item) ? 'checked' : '';
   const itemLower = item.toLowerCase();
+
   return (
     `<div class="event__type-item">
       <input id="event-type-${itemLower}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${item}" ${isChecked}>
@@ -40,6 +41,7 @@ function createButtonsTemplate(mode, isDeleting) {
 function createEventFormHeaderTemplate (point, destinations, mode){
   const {id, type, dateFrom, dateTo, basePrice, isSaving, isDeleting} = point;
   const destinationValue = destinations.filter((item) => item.id === point.destination)[0]?.name ?? '';
+
   return (`
     <header class="event__header">
       <div class="event__type-wrapper">

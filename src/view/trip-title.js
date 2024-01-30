@@ -19,6 +19,7 @@ const renderDestinations = ({firstDestination, secondDestination, lastDestinatio
       secondDestination = '&mdash; ... &mdash;';
       break;
   }
+
   return `${firstDestination} ${secondDestination} ${lastDestination}`;
 };
 
@@ -45,7 +46,6 @@ export default class TripTitle extends AbstractView {
 
   constructor({destinations, dates}) {
     super();
-
     this.#destinations = destinations;
     this.#dates = dates;
   }

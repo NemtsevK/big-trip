@@ -15,8 +15,8 @@ export default class FilterPresenter {
     this.#tripModel = tripModel;
     this.#filterModel = filterModel;
 
-    this.#tripModel.addObserver(this.#handleModelChange);
-    this.#filterModel.addObserver(this.#handleModelChange);
+    this.#tripModel.addObserver(this.#modelChangeHandler);
+    this.#filterModel.addObserver(this.#modelChangeHandler);
   }
 
   get filters() {
@@ -49,7 +49,7 @@ export default class FilterPresenter {
   };
 
   //обновить представления фильтра точек маршрута в случае изменения модели данных
-  #handleModelChange = () => {
+  #modelChangeHandler = () => {
     this.init();
   };
 }

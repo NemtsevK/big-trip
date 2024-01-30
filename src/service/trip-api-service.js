@@ -1,7 +1,8 @@
 import ApiService from '../framework/api-service.js';
 import {ApiMethod} from '../const.js';
 
-export default class BigTripApiService extends ApiService {
+//класс для взаимодействия с сервером через api
+export default class TripApiService extends ApiService {
 
   get tripPoints() {
     return this._load({url: 'points'}).then(ApiService.parseResponse);
@@ -15,6 +16,7 @@ export default class BigTripApiService extends ApiService {
     return this._load({url: 'offers'}).then(ApiService.parseResponse);
   }
 
+  //обновить точку маршрута
   async updatePoint(point) {
     const response = await this._load({
       url: `points/${point.id}`,
@@ -25,6 +27,7 @@ export default class BigTripApiService extends ApiService {
     return await ApiService.parseResponse(response);
   }
 
+  //добавить точку маршрута
   async addPoint(point) {
     const response = await this._load({
       url: 'points',
@@ -35,6 +38,7 @@ export default class BigTripApiService extends ApiService {
     return await ApiService.parseResponse(response);
   }
 
+  //удалить точку маршрута
   async deletePoint(point) {
     return await this._load({
       url: `points/${point.id}`,
@@ -42,6 +46,7 @@ export default class BigTripApiService extends ApiService {
     });
   }
 
+  //преобразование формата точки маршрута для сервера
   #adaptPointToServer(point) {
     const newPoint = {
       ...point,
@@ -55,6 +60,7 @@ export default class BigTripApiService extends ApiService {
     delete newPoint.dateTo;
     delete newPoint.dateFrom;
     delete newPoint.isFavorite;
+
     return newPoint;
   }
 }

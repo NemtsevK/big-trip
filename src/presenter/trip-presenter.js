@@ -32,8 +32,8 @@ export default class TripPresenter {
     this.#tripModel = tripModel;
     this.#filterModel = filterModel;
 
-    this.#tripModel.addObserver(this.#handleModelChange);
-    this.#filterModel.addObserver(this.#handleModelChange);
+    this.#tripModel.addObserver(this.#modelChangeHandler);
+    this.#filterModel.addObserver(this.#modelChangeHandler);
 
     this.#uiBlocker = new UiBlocker({
       lowerLimit: BlockerTimeLimit.LOWER_LIMIT,
@@ -47,9 +47,10 @@ export default class TripPresenter {
       remove(this.#errorMessageComponent);
       this.#loadingComponent = new MessageView({text: InfoMessages.LOADING});
       render(this.#loadingComponent, this.#listContainer);
-    } else {
-      this.#renderPageMain();
+      return;
     }
+
+    this.#renderPageMain();
   }
 
   //отобразить основную область страницы
@@ -59,19 +60,23 @@ export default class TripPresenter {
       remove(this.#sortViewComponent);
       this.#sortViewComponent = null;
       this.#renderEmptyPointsList();
-    } else {
-      this.#renderPointsList(filteredPoints);
+      return;
     }
+
+    this.#renderPointsList(filteredPoints);
   }
 
   #renderPointsList(filteredPoints) {
     this.#renderSort();
+
     if (!this.#listComponent) {
       this.#listComponent = new PointListView();
     }
+
     render(this.#listComponent, this.#listContainer);
     remove(this.#infoMessageComponent);
     this.#infoMessageComponent = null;
+
     if (filteredPoints) {
       this.#renderTripPoints(filteredPoints);
     }
@@ -155,7 +160,7 @@ export default class TripPresenter {
   };
 
   //обновить представления списка точек маршрута в случае изменения модели данных
-  #handleModelChange = (updateType, id) => {
+  #modelChangeHandler = (updateType, id) => {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(id).init(this.#tripModel.getContentById(id));
@@ -251,16 +256,17 @@ export default class TripPresenter {
       offers: this.#tripModel.offers,
       onDataChange: this.#onDataChange,
       onModeChange: this.#onModeChange,
-      onCancelButtonClick: this.#handleCancelButtonClick,
+      onCancelButtonClick: this.#onCancelButtonClick,
       mode: ModeType.NEW
     });
 
     this.#newPointPresenter.init();
   };
 
-  #handleCancelButtonClick = () => {
+  #onCancelButtonClick = () => {
     this.#newEventButtonComponent.updateElement({isDisabled: false});
     const filteredPoints = filterPoints(this.#filterModel.filter, this.#tripModel.tripPoints);
+
     if (filteredPoints.length === 0) {
       this.#renderPageMain();
     }

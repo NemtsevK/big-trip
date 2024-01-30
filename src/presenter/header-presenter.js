@@ -15,11 +15,11 @@ export default class HeaderPresenter {
   constructor({headerContainer, tripModel}) {
     this.#headerContainer = headerContainer;
     this.#tripModel = tripModel;
-    this.#tripModel.addObserver(this.#handleModelChange);
+    this.#tripModel.addObserver(this.#modelChangeHandler);
   }
 
-  //
-  #handleModelChange = (updateType) => {
+  //обработка изменений данных в шапке сайта
+  #modelChangeHandler = (updateType) => {
     if (updateType !== UpdateType.ERROR) {
       this.#renderHeader();
     }
@@ -62,6 +62,7 @@ export default class HeaderPresenter {
     const firstDestinationId = destinationsId[0];
     const secondDestinationId = (destinationsCount.size === 3) ? destinationsId[1] : null;
     const lastDestinationId = destinationsId[destinationsId.length - 1];
+
     return {
       firstDestination: this.#destinations.find((destination) => destination.id === firstDestinationId).name,
       secondDestination: (secondDestinationId) ? this.#destinations.find((destination) => destination.id === secondDestinationId).name : null,

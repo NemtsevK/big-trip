@@ -50,6 +50,7 @@ export default class TripModel extends Observable {
     const point = this.#tripPoints.find((item) => item.id === id);
     const destination = this.#destinations.find((item) => item.id === point.destination);
     const offers = this.#offers.find((item) => item.type === point.type.toLocaleLowerCase());
+
     return {
       point: point ?? {},
       destination: destination ?? {},
@@ -86,7 +87,6 @@ export default class TripModel extends Observable {
       await this.#apiService.deletePoint(deletedPoint);
       this.#tripPoints = this.tripPoints.filter((item) => item.id !== deletedPoint.id);
       this._notify(updateType, null);
-
     } catch (error) {
       throw new Error(`Can't delete point. ${error}`);
     }
