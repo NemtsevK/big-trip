@@ -113,7 +113,7 @@ export default class TripPresenter {
 
   //очистить все точки маршрута и их презентеры
   #clearTripPoints() {
-    this.#pointPresenters.forEach((tripPoint) => tripPoint.destroy());
+    this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
   }
 

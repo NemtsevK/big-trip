@@ -38,7 +38,7 @@ export default class PointPresenter {
       this.#content = {
         point: BLANK_POINT,
         destination: null,
-        offers: null
+        offers: null,
       };
       this.#renderEventForm();
       document.addEventListener('keydown', this.#escKeyDownHandler);
