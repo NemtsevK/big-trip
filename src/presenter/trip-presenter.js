@@ -119,6 +119,9 @@ export default class TripPresenter {
 
   //событие добавление/изменение/удаление точки маршрута
   #onDataChange = async (actionType, updateType, newPoint) => {
+    this.#uiBlocker.block();
+    const currentPointPresenter = this.#pointPresenters.get(newPoint.id);
+
     switch (actionType) {
       case UserAction.ADD_EVENT:
         this.#newPointPresenter.setSavingMode();
@@ -131,22 +134,24 @@ export default class TripPresenter {
         }
         break;
       case UserAction.UPDATE_EVENT:
-        this.#pointPresenters.get(newPoint.id).setSavingMode();
+        currentPointPresenter.setSavingMode();
         try {
           await this.#tripModel.updatePoint(updateType, newPoint);
         } catch (error) {
-          this.#pointPresenters.get(newPoint.id).setAborting();
+          currentPointPresenter.setAborting();
         }
         break;
       case UserAction.DELETE_EVENT:
-        this.#pointPresenters.get(newPoint.id).setDeletingMode();
+        currentPointPresenter.setDeletingMode();
         try {
           await this.#tripModel.deletePoint(updateType, newPoint);
         } catch (error) {
-          this.#pointPresenters.get(newPoint.id).setAborting();
+          currentPointPresenter.setAborting();
         }
         break;
     }
+
+    this.#uiBlocker.unblock();
   };
 
   //обновить представления списка точек маршрута в случае изменения модели данных
@@ -206,11 +211,12 @@ export default class TripPresenter {
   #onModeChange = (id) => {
     if (this.#newPointPresenter) {
       this.#newPointPresenter.destroy();
+      this.#newEventButtonComponent.updateElement({isDisabled: false});
     }
 
-    this.#pointPresenters.forEach((tripPoint, index) => {
+    this.#pointPresenters.forEach((pointPresenter, index) => {
       if (index !== id) {
-        tripPoint.resetView();
+        pointPresenter.resetView();
       }
     });
   };

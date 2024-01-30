@@ -25,10 +25,7 @@ const renderDestinations = ({firstDestination, secondDestination, lastDestinatio
 //получить начальную и конечные даты путешествия
 const renderDates = ({firstDate, lastDate}) => {
   const dateFormat = DateFormat.MONTH_DAY.split(' ').reverse().join(' ');
-  const [firstDay, firstMonth] = convertDate(firstDate, dateFormat).split(' ');
-  const [secondDay, secondMonth] = convertDate(lastDate, dateFormat).split(' ');
-
-  return `${firstDay} ${firstMonth} &mdash; ${secondDay} ${secondMonth}`;
+  return `${convertDate(firstDate, dateFormat)} &mdash; ${convertDate(lastDate, dateFormat)}`;
 };
 
 //создать блок заголовка путешествия

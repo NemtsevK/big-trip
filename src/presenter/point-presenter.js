@@ -47,10 +47,8 @@ export default class PointPresenter {
     }
 
     this.#content = content;
-
     const previousTripPoint = this.#pointComponent;
     const previousEventForm = this.#eventFormComponent;
-
     this.#renderTripPoint();
     this.#renderEventForm();
 
@@ -61,8 +59,8 @@ export default class PointPresenter {
         replace(this.#pointComponent, previousTripPoint);
       }
 
-      if (this.#mode && this.#pointListContainer.contains(previousEventForm.element)) {
-        replace(this.#eventFormComponent, previousEventForm);
+      if (this.#pointListContainer.contains(previousEventForm.element)) {
+        replace(this.#pointComponent, previousEventForm);
       }
 
       remove(previousTripPoint);
@@ -92,7 +90,6 @@ export default class PointPresenter {
       this.#eventFormElement = this.#eventFormComponent.element.querySelector('form');
       render(this.#formHeader, this.#eventFormElement);
       render(this.#formDetails, this.#eventFormElement);
-
     }
   }
 
@@ -133,19 +130,21 @@ export default class PointPresenter {
   //отобразить точку маршрута
   #renderTripPoint() {
     this.#pointComponent = new PointView({
-      content: this.#content,
+      point: this.#content.point,
+      destination: this.#content.destination,
+      offers: this.#content.offers,
       onArrowButtonClick: this.#onArrowButtonClick,
       onFavoriteClick: this.#onFavoriteClick
     });
   }
 
-  //событие клик по кнопке открытия формы добавления/редактирования точки маршрута
+  //событие клик по кнопке открытия формы редактирования точки маршрута
   #onArrowButtonClick = () => {
     this.#replacePointToForm();
     document.addEventListener('keydown', this.#escKeyDownHandler);
   };
 
-  //закрыть форму добавления/редактирования точки маршрута
+  //закрыть форму редактирования точки маршрута
   #closeForm = () => {
     if (this.#mode === ModeType.NEW) {
       remove(this.#eventFormComponent);
@@ -160,8 +159,8 @@ export default class PointPresenter {
 
   //отобразить форму добавления/редактирования точки маршрута
   #renderEventForm() {
-    this.#eventFormComponent = new EventForm({onFormSubmit: this.#closeForm});
-    this.#eventFormElement = this.#eventFormComponent.element.querySelector('.event--edit');
+    this.#eventFormComponent = new EventForm();
+    this.#eventFormElement = this.#eventFormComponent.element.querySelector('form');
     this.#formHeader = new EventFormHeader({
       point: this.#content.point,
       destinations: this.#destinations,

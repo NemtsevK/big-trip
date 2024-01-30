@@ -63,9 +63,9 @@ export default class HeaderPresenter {
     const secondDestinationId = (destinationsCount.size === 3) ? destinationsId[1] : null;
     const lastDestinationId = destinationsId[destinationsId.length - 1];
     return {
-      firstDestination: this.#destinations.find((destination) => destination.id === firstDestinationId)?.name,
-      secondDestination: (secondDestinationId) ? this.#destinations.find((destination) => destination.id === secondDestinationId)?.name : null,
-      lastDestination: this.#destinations.find((destination) => destination.id === lastDestinationId)?.name,
+      firstDestination: this.#destinations.find((destination) => destination.id === firstDestinationId).name,
+      secondDestination: (secondDestinationId) ? this.#destinations.find((destination) => destination.id === secondDestinationId).name : null,
+      lastDestination: this.#destinations.find((destination) => destination.id === lastDestinationId).name,
       destinationsCount: destinationsCount.size
     };
   }

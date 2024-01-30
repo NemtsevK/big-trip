@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import {DateFormat, MILLISECONDS_IN_HOUR, MILLISECONDS_IN_DAY, FilterType} from '../const.js';
+import {DateFormat, MILLISECONDS_IN_HOUR, MILLISECONDS_IN_DAY, FilterType, MILLISECONDS_IN_MINUTE} from '../const.js';
 import isBetween from 'dayjs/plugin/isBetween';
 
 dayjs.extend(duration);
@@ -23,7 +23,11 @@ function getDifferenceInTime(start, end) {
     return dayjs.duration(difference).format(DateFormat.HOURS_MINUTES_WITH_POSTFIX);
   }
 
-  return dayjs.duration(difference).format(DateFormat.DAY_HOURS_MINUTES_WITH_POSTFIX);
+  const days = String(Math.floor(difference / MILLISECONDS_IN_DAY)).padStart(2, '0');
+  const hours = String(Math.floor((difference % (24 * 60 * 60 * 1000)) / MILLISECONDS_IN_HOUR)).padStart(2, '0');
+  const minutes = String(Math.floor((difference % (60 * 60 * 1000)) / MILLISECONDS_IN_MINUTE)).padStart(2, '0');
+
+  return `${days}D ${hours}H ${minutes}M`;
 }
 
 //сортировка по дате

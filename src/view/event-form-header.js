@@ -28,7 +28,7 @@ function createPointTypeTemplate(item) {
 function createButtonsTemplate(mode, isDeleting) {
   if (mode === ModeType.EDIT) {
     return (
-      `<button class="event__reset-btn" type="reset">${(isDeleting) ? 'Deleting' : 'Delete'}</button>
+      `<button class="event__reset-btn" type="reset">${(isDeleting) ? 'Deleting...' : 'Delete'}</button>
       <button class="event__rollup-btn" type="button"><span class="visually-hidden">Open event</span></button>`
     );
   }
@@ -38,7 +38,7 @@ function createButtonsTemplate(mode, isDeleting) {
 
 //создать блок заголовка формы добавления/редактирования точки маршрута
 function createEventFormHeaderTemplate (point, destinations, mode){
-  const {id, type, dateFrom, dateTo} = point;
+  const {id, type, dateFrom, dateTo, basePrice, isSaving, isDeleting} = point;
   const destinationValue = destinations.filter((item) => item.id === point.destination)[0]?.name ?? '';
   return (`
     <header class="event__header">
@@ -80,15 +80,14 @@ function createEventFormHeaderTemplate (point, destinations, mode){
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input event__input--price" id="event-price-${id}" type="text" name="event-price" value="${point.basePrice}" pattern="[0-9]+" required>
+      <input class="event__input event__input--price" id="event-price-${id}" type="text" name="event-price" value="${basePrice}" pattern="[0-9]+" required>
     </div>
 
-    <button class="event__save-btn btn btn--blue" type="submit">Save</button>
-      ${createButtonsTemplate(mode, point.isDeleting)}
+    <button class="event__save-btn btn btn--blue" type="submit">${(isSaving) ? 'Saving...' : 'Save'}</button>
+      ${createButtonsTemplate(mode, isDeleting)}
     </header>`
   );
 }
-
 
 //класс для визуального представления заголовка формы добавления/редактирования точки маршрута
 export default class EventFormHeader extends AbstractStatefulView {
@@ -217,11 +216,7 @@ export default class EventFormHeader extends AbstractStatefulView {
   //событие изменение стоимости
   #priceChangeHandler = (event) => {
     event.preventDefault();
-    if (event.target.checkValidity()) {
-      this._setState({basePrice: event.target.value});
-    } else {
-      event.target.value = this._state.basePrice;
-    }
+    this._setState({basePrice: event.target.value});
   };
 
   //событие клик по кнопке сохранить

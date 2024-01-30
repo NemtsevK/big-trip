@@ -9,7 +9,7 @@ export default class TripModel extends Observable {
   #destinations = null;
   #apiService = null;
 
-  constructor({apiService: apiService}) {
+  constructor({apiService}) {
     super();
     this.#apiService = apiService;
   }
@@ -33,7 +33,7 @@ export default class TripModel extends Observable {
   async init() {
     try {
       const points = await this.#apiService.tripPoints;
-      this.#tripPoints = points.map(this.#adaptPointToClient);
+      this.tripPoints = points.map(this.#adaptPointToClient);
       this.#destinations = await this.#apiService.destinations;
       this.#offers = await this.#apiService.offers;
       this._notify(UpdateType.INIT, null);
@@ -62,10 +62,10 @@ export default class TripModel extends Observable {
     try {
       const response = await this.#apiService.updatePoint(updatedPoint);
       const newPoint = this.#adaptPointToClient(response);
-      this.#tripPoints = updateItem(this.#tripPoints, newPoint);
+      this.tripPoints = updateItem(this.#tripPoints, newPoint);
       this._notify(updateType, newPoint.id);
     } catch (error) {
-      throw new Error('Can\'t update point');
+      throw new Error(`Can't update point. ${error}`);
     }
   }
 
@@ -83,17 +83,13 @@ export default class TripModel extends Observable {
   //удалить точку маршрута
   async deletePoint(updateType, deletedPoint) {
     try {
-      const response = await this.#apiService.deletePoint(deletedPoint);
-
-      if (response.ok) {
-        this.#tripPoints = this.#tripPoints.filter((item) => item.id !== deletedPoint.id);
-        this._notify(updateType, null);
-      }
+      await this.#apiService.deletePoint(deletedPoint);
+      this.#tripPoints = this.tripPoints.filter((item) => item.id !== deletedPoint.id);
+      this._notify(updateType, null);
 
     } catch (error) {
-      throw new Error('Can\'t delete point');
+      throw new Error(`Can't delete point. ${error}`);
     }
-
   }
 
   #adaptPointToClient(point) {
