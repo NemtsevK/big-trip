@@ -1,5 +1,5 @@
 import {render, remove, replace} from '../framework/render.js';
-import {EmptyListMessage, InfoMessages, UpdateType, UserAction, DEFAULT_SORT, DEFAULT_FILTER, ModeType, BlockerTimeLimit} from '../const.js';
+import {EmptyListMessage, InfoMessage, UpdateType, UserAction, DEFAULT_SORT, DEFAULT_FILTER, ModeType, BlockerTimeLimit} from '../const.js';
 import SortListView from '../view/sort-list-view.js';
 import PointListView from '../view/point-list-view.js';
 import MessageView from '../view/message-view.js';
@@ -45,7 +45,7 @@ export default class TripPresenter {
     this.#renderNewEventButton();
     if (this.#isLoading) {
       remove(this.#errorMessageComponent);
-      this.#loadingComponent = new MessageView({text: InfoMessages.LOADING});
+      this.#loadingComponent = new MessageView({text: InfoMessage.LOADING});
       render(this.#loadingComponent, this.#listContainer);
       return;
     }
@@ -66,6 +66,7 @@ export default class TripPresenter {
     this.#renderPointsList(filteredPoints);
   }
 
+  //отобразить список точек маршрута
   #renderPointsList(filteredPoints) {
     this.#renderSort();
 
@@ -189,12 +190,13 @@ export default class TripPresenter {
     }
   };
 
+  //отобразить сообщение об ошибке
   #renderErrorMessage() {
-    this.#errorMessageComponent = new MessageView({text: InfoMessages.ERROR});
+    this.#errorMessageComponent = new MessageView({text: InfoMessage.ERROR});
     render(this.#errorMessageComponent, this.#listContainer);
   }
 
-  //создать блок сортировки
+  //отобразить блок сортировки
   #renderSort = () => {
     const previousSortViewComponent = this.#sortViewComponent;
     const newSortViewComponent = new SortListView({
@@ -263,6 +265,7 @@ export default class TripPresenter {
     this.#newPointPresenter.init();
   };
 
+  //событие клик по кнопке отменить добавление новой точки маршрута
   #onCancelButtonClick = () => {
     this.#newEventButtonComponent.updateElement({isDisabled: false});
     const filteredPoints = filterPoints(this.#filterModel.filter, this.#tripModel.tripPoints);

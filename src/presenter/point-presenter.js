@@ -87,7 +87,7 @@ export default class PointPresenter {
       this.#eventFormComponent.updateElement({
         isDisabled: true
       });
-      this.#eventFormElement = this.#eventFormComponent.element.querySelector('form');
+      this.#eventFormElement = this.#eventFormComponent.element.querySelector('.event--edit');
       render(this.#formHeader, this.#eventFormElement);
       render(this.#formDetails, this.#eventFormElement);
     }
@@ -98,7 +98,7 @@ export default class PointPresenter {
       this.#eventFormComponent.updateElement({
         isDisabled: true
       });
-      this.#eventFormElement = this.#eventFormComponent.element.querySelector('form');
+      this.#eventFormElement = this.#eventFormComponent.element.querySelector('.event--edit');
       render(this.#formHeader, this.#eventFormElement);
       render(this.#formDetails, this.#eventFormElement);
       this.#formHeader.updateElement({
@@ -112,7 +112,7 @@ export default class PointPresenter {
       this.#eventFormComponent.updateElement({
         isDisabled: false
       });
-      this.#eventFormElement = this.#eventFormComponent.element.querySelector('form');
+      this.#eventFormElement = this.#eventFormComponent.element.querySelector('.event--edit');
       render(this.#formHeader, this.#eventFormElement);
       render(this.#formDetails, this.#eventFormElement);
       this.#formHeader.updateElement({
@@ -163,7 +163,7 @@ export default class PointPresenter {
   //отобразить форму добавления/редактирования точки маршрута
   #renderEventForm() {
     this.#eventFormComponent = new EventForm();
-    this.#eventFormElement = this.#eventFormComponent.element.querySelector('form');
+    this.#eventFormElement = this.#eventFormComponent.element.querySelector('.event--edit');
     this.#formHeader = new EventFormHeader({
       point: this.#content.point,
       destinations: this.#destinations,

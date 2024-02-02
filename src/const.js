@@ -30,7 +30,7 @@ const EmptyListMessage = {
   FUTURE: 'There are no future events now',
 };
 
-const InfoMessages = {
+const InfoMessage = {
   LOADING: 'Loading...',
   ERROR: 'Failed to load latest route information',
 };
@@ -74,7 +74,7 @@ const BLANK_POINT = {
   'destination': '',
   'dateFrom': '',
   'dateTo': '',
-  'basePrice': '0',
+  'basePrice': 0,
   'offers': [],
   'isFavorite': false,
 };
@@ -89,7 +89,7 @@ const ApiMethod = {
   GET: 'GET',
   PUT: 'PUT',
   POST: 'POST',
-  DELETE: 'DELETE'
+  DELETE: 'DELETE',
 };
 
 const BlockerTimeLimit = {
@@ -98,7 +98,7 @@ const BlockerTimeLimit = {
 };
 
 const BASE_URL = 'https://22.objects.htmlacademy.pro/big-trip';
-const AUTHORIZATION_STRING = 'Basic 2329089bigtrip22';
+const AUTHORIZATION_STRING = 'Basic 2329089bigtrip';
 
 export {
   MILLISECONDS_IN_MINUTE,
@@ -111,7 +111,7 @@ export {
   DEFAULT_SORT,
   POINTS_TYPE,
   EmptyListMessage,
-  InfoMessages,
+  InfoMessage,
   ModeType,
   UserAction,
   UpdateType,
