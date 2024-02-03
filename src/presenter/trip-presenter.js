@@ -196,7 +196,7 @@ export default class TripPresenter {
       case UserAction.UPDATE_EVENT:
         currentPointPresenter.setSavingMode();
         try {
-          await this.#tripModel.updatePoint(updateType, newPoint);
+          await this.#tripModel.updateTripPoint(updateType, newPoint);
         } catch (error) {
           currentPointPresenter.setAborting();
         }
