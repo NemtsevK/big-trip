@@ -9,6 +9,7 @@ export default class FilterModel extends Observable {
     return this.#filter;
   }
 
+  //установка нового фильтра и уведомление наблюдателей об изменении
   setFilter(updateType, filter) {
     this.#filter = filter;
     this._notify(updateType);

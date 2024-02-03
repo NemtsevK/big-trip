@@ -128,15 +128,6 @@ export default class EventFormHeader extends AbstractStatefulView {
     return createEventFormHeaderTemplate(this._state, this.#destinations, this.#mode);
   }
 
-  resetState() {
-    this.updateElement(this.#point);
-  }
-
-  //установить новые дополнительные предложения
-  setNewOffers(newOffers) {
-    this._setState({offers: newOffers});
-  }
-
   _restoreHandlers() {
     this.element.querySelector('.event__type-group').addEventListener('change', this.#pointTypeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
@@ -154,6 +145,16 @@ export default class EventFormHeader extends AbstractStatefulView {
     this.#setDatePickerTo();
   }
 
+  //вернуть исходное состояние
+  resetState() {
+    this.updateElement(this.#point);
+  }
+
+  //установить новые дополнительные предложения
+  setNewOffers(newOffers) {
+    this._setState({offers: newOffers});
+  }
+
   //установить дату и время начала точки маршрута
   #setDatePickerFrom() {
     this.#datePickerFrom = flatpickr(
@@ -167,13 +168,6 @@ export default class EventFormHeader extends AbstractStatefulView {
     );
   }
 
-  //событие изменение даты и время начала точки маршрута
-  #dateFromChangeHandler = ([userDate]) => {
-    this.updateElement({
-      dateFrom: userDate.toISOString(),
-    });
-  };
-
   //установить дату и время окончания точки маршрута
   #setDatePickerTo() {
     this.#datePickerTo = flatpickr(
@@ -186,6 +180,13 @@ export default class EventFormHeader extends AbstractStatefulView {
       },
     );
   }
+
+  //событие изменение даты и время начала точки маршрута
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate.toISOString(),
+    });
+  };
 
   //событие изменение даты и время окончания точки маршрута
   #dateToChangeHandler = ([userDate]) => {

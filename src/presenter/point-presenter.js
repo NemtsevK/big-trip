@@ -68,17 +68,20 @@ export default class PointPresenter {
     }
   }
 
+  //сброс представления точки маршрута к изначальному состоянию
   resetView = () => {
     if (this.#mode !== ModeType.DEFAULT) {
       this.#closeForm();
     }
   };
 
+  //удаление точки компонентов точки маршрута и формы события
   destroy() {
     remove(this.#pointComponent);
     remove(this.#eventFormComponent);
   }
 
+  //переключение формы в режим сохранения
   setSavingMode() {
     if (this.#mode !== ModeType.DEFAULT) {
       this.#formHeader.updateElement({
@@ -93,6 +96,7 @@ export default class PointPresenter {
     }
   }
 
+  //переключение формы в режим удаления
   setDeletingMode() {
     if (this.#mode !== ModeType.DEFAULT) {
       this.#eventFormComponent.updateElement({
@@ -107,6 +111,7 @@ export default class PointPresenter {
     }
   }
 
+  //обработка ситуации при ошибке
   setAborting() {
     const resetFormElement = () => {
       this.#eventFormComponent.updateElement({
@@ -139,12 +144,6 @@ export default class PointPresenter {
       onFavoriteClick: this.#onFavoriteClick
     });
   }
-
-  //событие клик по кнопке открытия формы редактирования точки маршрута
-  #onArrowButtonClick = () => {
-    this.#replacePointToForm();
-    document.addEventListener('keydown', this.#escKeyDownHandler);
-  };
 
   //закрыть форму редактирования точки маршрута
   #closeForm = () => {
@@ -198,6 +197,12 @@ export default class PointPresenter {
     this.#onModeChange(this.#content.point.id);
     replace(this.#eventFormComponent, this.#pointComponent);
   }
+
+  //событие клик по кнопке открытия формы редактирования точки маршрута
+  #onArrowButtonClick = () => {
+    this.#replacePointToForm();
+    document.addEventListener('keydown', this.#escKeyDownHandler);
+  };
 
   //событие нажать кнопку esc
   #escKeyDownHandler = (event) => {

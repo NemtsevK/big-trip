@@ -32,8 +32,8 @@ export default class TripPresenter {
     this.#tripModel = tripModel;
     this.#filterModel = filterModel;
 
-    this.#tripModel.addObserver(this.#modelChangeHandler);
-    this.#filterModel.addObserver(this.#modelChangeHandler);
+    this.#tripModel.addObserver(this.#changeModel);
+    this.#filterModel.addObserver(this.#changeModel);
 
     this.#uiBlocker = new UiBlocker({
       lowerLimit: BlockerTimeLimit.LOWER_LIMIT,
@@ -123,6 +123,60 @@ export default class TripPresenter {
     this.#pointPresenters.clear();
   }
 
+  //отобразить сообщение об ошибке
+  #renderErrorMessage() {
+    this.#errorMessageComponent = new MessageView({text: InfoMessage.ERROR});
+    render(this.#errorMessageComponent, this.#listContainer);
+  }
+
+  //отобразить блок сортировки
+  #renderSort = () => {
+    const previousSortViewComponent = this.#sortViewComponent;
+    const newSortViewComponent = new SortListView({
+      onSortChange: this.#onSortChange,
+      currentSort: this.#currentSort
+    });
+
+    if (previousSortViewComponent === null) {
+      render(newSortViewComponent, this.#listContainer);
+    } else {
+      replace(newSortViewComponent, previousSortViewComponent);
+      remove(previousSortViewComponent);
+    }
+
+    this.#sortViewComponent = newSortViewComponent;
+  };
+
+  //обработка изменений модели данных
+  #changeModel = (updateType, id) => {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this.#pointPresenters.get(id).init(this.#tripModel.getContentById(id));
+        break;
+      case UpdateType.MINOR:
+        this.#clearTripPoints();
+        this.#renderPageMain();
+        break;
+      case UpdateType.MAJOR:
+        this.#clearTripPoints();
+        this.#currentSort = DEFAULT_SORT;
+        this.init();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.init();
+        break;
+      case UpdateType.ERROR:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        remove(this.#sortViewComponent);
+        this.#clearTripPoints();
+        this.#renderErrorMessage();
+        break;
+    }
+  };
+
   //событие добавление/изменение/удаление точки маршрута
   #onDataChange = async (actionType, updateType, newPoint) => {
     this.#uiBlocker.block();
@@ -158,60 +212,6 @@ export default class TripPresenter {
     }
 
     this.#uiBlocker.unblock();
-  };
-
-  //обновить представления списка точек маршрута в случае изменения модели данных
-  #modelChangeHandler = (updateType, id) => {
-    switch (updateType) {
-      case UpdateType.PATCH:
-        this.#pointPresenters.get(id).init(this.#tripModel.getContentById(id));
-        break;
-      case UpdateType.MINOR:
-        this.#clearTripPoints();
-        this.#renderPageMain();
-        break;
-      case UpdateType.MAJOR:
-        this.#clearTripPoints();
-        this.#currentSort = DEFAULT_SORT;
-        this.init();
-        break;
-      case UpdateType.INIT:
-        this.#isLoading = false;
-        remove(this.#loadingComponent);
-        this.init();
-        break;
-      case UpdateType.ERROR:
-        this.#isLoading = false;
-        remove(this.#loadingComponent);
-        remove(this.#sortViewComponent);
-        this.#clearTripPoints();
-        this.#renderErrorMessage();
-        break;
-    }
-  };
-
-  //отобразить сообщение об ошибке
-  #renderErrorMessage() {
-    this.#errorMessageComponent = new MessageView({text: InfoMessage.ERROR});
-    render(this.#errorMessageComponent, this.#listContainer);
-  }
-
-  //отобразить блок сортировки
-  #renderSort = () => {
-    const previousSortViewComponent = this.#sortViewComponent;
-    const newSortViewComponent = new SortListView({
-      onSortChange: this.#onSortChange,
-      currentSort: this.#currentSort
-    });
-
-    if (previousSortViewComponent === null) {
-      render(newSortViewComponent, this.#listContainer);
-    } else {
-      replace(newSortViewComponent, previousSortViewComponent);
-      remove(previousSortViewComponent);
-    }
-
-    this.#sortViewComponent = newSortViewComponent;
   };
 
   //событие изменения режима точки маршрута

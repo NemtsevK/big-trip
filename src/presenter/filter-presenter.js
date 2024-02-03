@@ -15,8 +15,8 @@ export default class FilterPresenter {
     this.#tripModel = tripModel;
     this.#filterModel = filterModel;
 
-    this.#tripModel.addObserver(this.#modelChangeHandler);
-    this.#filterModel.addObserver(this.#modelChangeHandler);
+    this.#tripModel.addObserver(this.#changeModel);
+    this.#filterModel.addObserver(this.#changeModel);
   }
 
   get filters() {
@@ -41,15 +41,15 @@ export default class FilterPresenter {
     this.#filterComponent = newFilterComponent;
   }
 
+  //обработка изменений модели данных
+  #changeModel = () => {
+    this.init();
+  };
+
   //событие изменение фильтра точек маршрута
   #onFilterChange = (filterType) => {
     if (this.#filterModel.filter !== filterType) {
       this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
     }
-  };
-
-  //обновить представления фильтра точек маршрута в случае изменения модели данных
-  #modelChangeHandler = () => {
-    this.init();
   };
 }

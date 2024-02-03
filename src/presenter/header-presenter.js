@@ -16,11 +16,11 @@ export default class HeaderPresenter {
   constructor({headerContainer, tripModel}) {
     this.#headerContainer = headerContainer;
     this.#tripModel = tripModel;
-    this.#tripModel.addObserver(this.#modelChangeHandler);
+    this.#tripModel.addObserver(this.#changeModel);
   }
 
-  //обработка изменений данных в шапке сайта
-  #modelChangeHandler = (updateType) => {
+  //обработка изменений модели данных в шапке сайта
+  #changeModel = (updateType) => {
     if (updateType !== UpdateType.ERROR) {
       this.#renderHeader();
     }
