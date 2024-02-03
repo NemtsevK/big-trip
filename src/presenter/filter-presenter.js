@@ -15,8 +15,8 @@ export default class FilterPresenter {
     this.#tripModel = tripModel;
     this.#filterModel = filterModel;
 
-    this.#tripModel.addObserver(this.#changeModel);
-    this.#filterModel.addObserver(this.#changeModel);
+    this.#tripModel.addObserver(this.#modelChangeHandler);
+    this.#filterModel.addObserver(this.#modelChangeHandler);
   }
 
   get filters() {
@@ -42,7 +42,7 @@ export default class FilterPresenter {
   }
 
   //обработка изменений модели данных
-  #changeModel = () => {
+  #modelChangeHandler = () => {
     this.init();
   };
 

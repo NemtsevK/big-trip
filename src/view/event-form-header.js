@@ -146,7 +146,7 @@ export default class EventFormHeader extends AbstractStatefulView {
   }
 
   //вернуть исходное состояние
-  resetState() {
+  reset() {
     this.updateElement(this.#point);
   }
 

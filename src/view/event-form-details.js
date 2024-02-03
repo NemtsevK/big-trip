@@ -104,7 +104,7 @@ export default class EventFormDetails extends AbstractStatefulView {
   }
 
   //вернуть исходное состояние
-  resetState() {
+  reset() {
     this.updateElement({point: this.#point, destination: this.#destination});
   }
 

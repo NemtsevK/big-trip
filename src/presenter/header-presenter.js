@@ -2,7 +2,7 @@ import TripCost from '../view/trip-cost.js';
 import TripTitle from '../view/trip-title.js';
 import TripInfo from '../view/trip-info.js';
 import {remove, render, RenderPosition, replace} from '../framework/render.js';
-import {DEFAULT_SORT, UpdateType} from '../const.js';
+import {DEFAULT_SORT, UpdateType, COUNT_DESTINATIONS_NAMES} from '../const.js';
 import {sortPoints} from '../utils/common.js';
 
 export default class HeaderPresenter {
@@ -16,15 +16,8 @@ export default class HeaderPresenter {
   constructor({headerContainer, tripModel}) {
     this.#headerContainer = headerContainer;
     this.#tripModel = tripModel;
-    this.#tripModel.addObserver(this.#changeModel);
+    this.#tripModel.addObserver(this.#modelChangeHandler);
   }
-
-  //обработка изменений модели данных в шапке сайта
-  #changeModel = (updateType) => {
-    if (updateType !== UpdateType.ERROR) {
-      this.#renderHeader();
-    }
-  };
 
   //отобразить шапку сайта
   #renderHeader() {
@@ -34,7 +27,7 @@ export default class HeaderPresenter {
 
     if (this.#points.length > 0) {
       sortPoints(DEFAULT_SORT, this.#points);
-      const destinations = this.#getTripTitleData();
+      const destinations = this.#getTripTitleInfo();
       const dates = this.#getFirstLastDates();
       const previousTripInfoComponent = this.#tripInfoComponent;
       const newTripInfoComponent = new TripInfo();
@@ -57,7 +50,7 @@ export default class HeaderPresenter {
   }
 
   //получить данные о путешествии для шапки
-  #getTripTitleData() {
+  #getTripTitleInfo() {
     const destinationsId = this.#points.map(({destination}) => destination);
 
     const destinationsName = destinationsId.map((id) => {
@@ -70,7 +63,7 @@ export default class HeaderPresenter {
 
     return {
       firstDestination: uniqueDestinationsName[0],
-      secondDestination: (destinationsCount === 3) ? uniqueDestinationsName[1] : null,
+      secondDestination: (destinationsCount === COUNT_DESTINATIONS_NAMES) ? uniqueDestinationsName[1] : null,
       lastDestination: uniqueDestinationsName[destinationsCount - 1],
       destinationsCount: destinationsCount
     };
@@ -100,4 +93,11 @@ export default class HeaderPresenter {
       return sum;
     }, 0);
   }
+
+  //обработка изменений модели данных в шапке сайта
+  #modelChangeHandler = (updateType) => {
+    if (updateType !== UpdateType.ERROR) {
+      this.#renderHeader();
+    }
+  };
 }

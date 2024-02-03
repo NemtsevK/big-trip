@@ -32,8 +32,8 @@ export default class TripPresenter {
     this.#tripModel = tripModel;
     this.#filterModel = filterModel;
 
-    this.#tripModel.addObserver(this.#changeModel);
-    this.#filterModel.addObserver(this.#changeModel);
+    this.#tripModel.addObserver(this.#modelChangeHandler);
+    this.#filterModel.addObserver(this.#modelChangeHandler);
 
     this.#uiBlocker = new UiBlocker({
       lowerLimit: BlockerTimeLimit.LOWER_LIMIT,
@@ -108,7 +108,7 @@ export default class TripPresenter {
         container: this.#listComponent.element,
         destinations: this.#tripModel.destinations,
         offers: this.#tripModel.offers,
-        onDataChange: this.#onDataChange,
+        onPointChange: this.#onPointChange,
         onModeChange: this.#onModeChange,
         mode: ModeType.DEFAULT
       });
@@ -148,7 +148,7 @@ export default class TripPresenter {
   };
 
   //обработка изменений модели данных
-  #changeModel = (updateType, id) => {
+  #modelChangeHandler = (updateType, id) => {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(id).init(this.#tripModel.getContentById(id));
@@ -178,7 +178,7 @@ export default class TripPresenter {
   };
 
   //событие добавление/изменение/удаление точки маршрута
-  #onDataChange = async (actionType, updateType, newPoint) => {
+  #onPointChange = async (actionType, updateType, newPoint) => {
     this.#uiBlocker.block();
     const currentPointPresenter = this.#pointPresenters.get(newPoint.id);
 
@@ -256,7 +256,7 @@ export default class TripPresenter {
       container: this.#listComponent.element,
       destinations: this.#tripModel.destinations,
       offers: this.#tripModel.offers,
-      onDataChange: this.#onDataChange,
+      onPointChange: this.#onPointChange,
       onModeChange: this.#onModeChange,
       onCancelButtonClick: this.#onCancelButtonClick,
       mode: ModeType.NEW

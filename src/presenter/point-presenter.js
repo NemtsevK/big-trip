@@ -20,14 +20,14 @@ export default class PointPresenter {
   #mode = null;
 
   #onModeChange = () => {};
-  #onDataChange = () => {};
+  #onPointChange = () => {};
   #onCancelButtonClick = () => {};
 
-  constructor({container, destinations, offers, onDataChange, onModeChange, onCancelButtonClick, mode}) {
+  constructor({container, destinations, offers, onPointChange, onModeChange, onCancelButtonClick, mode}) {
     this.#pointListContainer = container;
     this.#destinations = destinations;
     this.#offers = offers;
-    this.#onDataChange = onDataChange;
+    this.#onPointChange = onPointChange;
     this.#onModeChange = onModeChange;
     this.#onCancelButtonClick = onCancelButtonClick;
     this.#mode = mode;
@@ -152,8 +152,8 @@ export default class PointPresenter {
       this.#onCancelButtonClick();
     } else {
       this.#replaceFormToPoint();
-      this.#formHeader.resetState();
-      this.#formDetails.resetState();
+      this.#formHeader.reset();
+      this.#formDetails.reset();
     }
 
     document.removeEventListener('keydown', this.#escKeyDownHandler);
@@ -216,7 +216,7 @@ export default class PointPresenter {
   #onFavoriteClick = (actionType, updateType) => {
     const newPoint = {...this.#content.point};
     newPoint.isFavorite = !this.#content.point.isFavorite;
-    this.#onDataChange(actionType, updateType, newPoint);
+    this.#onPointChange(actionType, updateType, newPoint);
   };
 
   //событие изменить тип точки маршрута
@@ -236,11 +236,11 @@ export default class PointPresenter {
 
   //событие клик по кнопке удаления формы редактирования точки маршрута
   #onButtonDeleteClick = (point) => {
-    this.#onDataChange(UserAction.DELETE_EVENT, UpdateType.MINOR, point);
+    this.#onPointChange(UserAction.DELETE_EVENT, UpdateType.MINOR, point);
   };
 
   //событие сохранить форму добавления/изменения точки маршрута
   #onFormSubmit = (actionType, updateType, newPoint) => {
-    this.#onDataChange(actionType, updateType, newPoint);
+    this.#onPointChange(actionType, updateType, newPoint);
   };
 }
