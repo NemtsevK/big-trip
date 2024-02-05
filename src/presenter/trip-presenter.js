@@ -6,13 +6,13 @@ import MessageView from '../view/message-view.js';
 import PointPresenter from './point-presenter.js';
 import {sortPoints} from '../utils/common.js';
 import {filterPoints} from '../utils/date.js';
-import NewEventButton from '../view/new-event-button.js';
+import NewEventButtonView from '../view/new-event-button-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 //класс для взаимодействия данных и интерфейса списка точек маршрута
 export default class TripPresenter {
   #listComponent = null;
-  #mainElement = document.querySelector('.trip-main');
+  #headerContainer = null;
   #listContainer = null;
   #tripModel = null;
   #filterModel = null;
@@ -27,10 +27,11 @@ export default class TripPresenter {
   #uiBlocker = null;
   #newPointPresenter = null;
 
-  constructor({container, tripModel, filterModel}) {
+  constructor({container, tripModel, filterModel, headerContainer}) {
     this.#listContainer = container;
     this.#tripModel = tripModel;
     this.#filterModel = filterModel;
+    this.#headerContainer = headerContainer;
 
     this.#tripModel.addObserver(this.#modelChangeHandler);
     this.#filterModel.addObserver(this.#modelChangeHandler);
@@ -86,8 +87,8 @@ export default class TripPresenter {
   //отобразить кнопку добавить новую точку маршрута
   #renderNewEventButton() {
     if (this.#newEventButtonComponent === null) {
-      this.#newEventButtonComponent = new NewEventButton({onNewEventButtonClick: this.#onNewEventButtonClick});
-      render(this.#newEventButtonComponent, this.#mainElement);
+      this.#newEventButtonComponent = new NewEventButtonView({onNewEventButtonClick: this.#onNewEventButtonClick});
+      render(this.#newEventButtonComponent, this.#headerContainer);
     }
   }
 
