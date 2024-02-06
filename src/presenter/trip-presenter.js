@@ -127,6 +127,7 @@ export default class TripPresenter {
   //отобразить сообщение об ошибке
   #renderErrorMessage() {
     this.#errorMessageComponent = new MessageView({text: InfoMessage.ERROR});
+    this.#newEventButtonComponent.updateElement({isDisabled: true});
     render(this.#errorMessageComponent, this.#listContainer);
   }
 
