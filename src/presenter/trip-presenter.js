@@ -45,6 +45,7 @@ export default class TripPresenter {
   init() {
     this.#renderNewEventButton();
     if (this.#isLoading) {
+      this.#newEventButtonComponent.updateElement({isDisabled: true});
       remove(this.#errorMessageComponent);
       this.#loadingComponent = new MessageView({text: InfoMessage.LOADING});
       render(this.#loadingComponent, this.#listContainer);
@@ -164,12 +165,12 @@ export default class TripPresenter {
         this.init();
         break;
       case UpdateType.INIT:
+        this.#newEventButtonComponent.updateElement({isDisabled: false});
         this.#isLoading = false;
         remove(this.#loadingComponent);
         this.init();
         break;
       case UpdateType.ERROR:
-        this.#newEventButtonComponent.updateElement({isDisabled: true});
         this.#isLoading = false;
         remove(this.#loadingComponent);
         remove(this.#sortViewComponent);
