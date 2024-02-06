@@ -127,7 +127,6 @@ export default class TripPresenter {
   //отобразить сообщение об ошибке
   #renderErrorMessage() {
     this.#errorMessageComponent = new MessageView({text: InfoMessage.ERROR});
-    this.#newEventButtonComponent.updateElement({isDisabled: true});
     render(this.#errorMessageComponent, this.#listContainer);
   }
 
@@ -170,6 +169,7 @@ export default class TripPresenter {
         this.init();
         break;
       case UpdateType.ERROR:
+        this.#newEventButtonComponent.updateElement({isDisabled: true});
         this.#isLoading = false;
         remove(this.#loadingComponent);
         remove(this.#sortViewComponent);
