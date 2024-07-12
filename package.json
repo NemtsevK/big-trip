@@ -1,9 +1,11 @@
 {
   "name": "big-trip",
-  "version": "22.0.0",
+  "author": "Nemtsev Konstantin <nemtsevk@hotmail.com> (https://github.com/NemtsevK)",
+  "description": "Личный проект «Большое путешествие»",
+  "homepage": "https://nemtsevk.github.io/big-trip/",
+  "repository": "https://github.com/NemtsevK/big-trip",
   "private": true,
-  "homepage": "https://nemtsev-k.github.io/big-trip/",
-  "description": "Проект «Большое путешествие» от HTML Academy",
+  "type": "module",
   "browserslist": [
     "last 2 versions",
     "not dead",
